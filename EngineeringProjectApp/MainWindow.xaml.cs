@@ -17,99 +17,61 @@ using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect.Toolkit.Controls;
 using Microsoft.Kinect.Toolkit.Interaction;
 using System.Globalization;
+using System.IO;
 
 namespace EngineeringProjectApp
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private KinectSensor sensor;
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
-
+        float height = 680.0f;
+        float width = 750.0f;
+        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public MainWindow()
         {
             InitializeComponent();
-            Loaded += MainWindowLoaded;
+            Loaded += WindowLoaded;
         }
 
-        private void MainWindowLoaded(object sender, RoutedEventArgs e)
+        private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            var sensorStatus = new KinectSensorChooser();
             this.drawingGroup = new DrawingGroup();
             this.imageSource = new DrawingImage(this.drawingGroup);
+            Image.Source = this.imageSource;
 
-            sensorStatus.KinectChanged += KinectSensorChooserKinectChanged;
+            foreach (var potentialSensor in KinectSensor.KinectSensors)
+            {
+                if (potentialSensor.Status == KinectStatus.Connected)
+                {
+                    Console.WriteLine("POLACZONY");
+                    this.sensor = potentialSensor;
+                    break;
+                }
+            }
 
-            kinectChooser.KinectSensorChooser = sensorStatus;
-            sensorStatus.Start();
-
-        }
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
             if (null != this.sensor)
             {
-                this.sensor.Stop();
+                this.sensor.SkeletonStream.Enable();
+                this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+
+                try
+                {
+                    this.sensor.Start();
+                }
+                catch (IOException)
+                {
+                    this.sensor = null;
+                }
             }
         }
 
-        private void KinectSensorChooserKinectChanged(object sender, KinectChangedEventArgs e)
+        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
+            Skeleton[] skeletons = new Skeleton[0];
 
-            if (sensor != null)
-                sensor.SkeletonFrameReady -= KinectSkeletonFrameReady;
-
-            sensor = e.NewSensor;
-
-            if (sensor == null)
-                return;
-
-            switch (Convert.ToString(e.NewSensor.Status))
-            {
-                case "Connected":
-                    KinectStatus.Content = "Connected";
-                    break;
-                case "Disconnected":
-                    KinectStatus.Content = "Disconnected";
-                    break;
-                case "Error":
-                    KinectStatus.Content = "Error";
-                    break;
-                case "NotReady":
-                    KinectStatus.Content = "Not Ready";
-                    break;
-                case "NotPowered":
-                    KinectStatus.Content = "Not Powered";
-                    break;
-                case "Initializing":
-                    KinectStatus.Content = "Initialising";
-                    break;
-                default:
-                    KinectStatus.Content = "Undefined";
-                    break;
-            }
-
-            sensor.SkeletonStream.Enable();
-            sensor.SkeletonFrameReady += KinectSkeletonFrameReady;
-
-        }
-
-
-        private void SensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-        //private void DrawJoint() {
-        //    DrawLin
-        //}
-
-        private void KinectSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
-        {
-            var skeletons = new Skeleton[0];
-
-            using (var skeletonFrame = e.OpenSkeletonFrame())
+            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
             {
                 if (skeletonFrame != null)
                 {
@@ -118,65 +80,47 @@ namespace EngineeringProjectApp
                 }
             }
 
-            if (skeletons.Length == 0)
+            using (DrawingContext dc = this.drawingGroup.Open())
             {
-                return;
+                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, width , height));
+                if (skeletons.Length != 0)
+                {
+                    Skeleton skel = skeletons[0];
+                    Brush drawBrush = null;
+                    if (skel.TrackingState == SkeletonTrackingState.Tracked)
+                    {
+                        var rightHand = skel.Joints[JointType.WristRight];
+                        if (rightHand.TrackingState == JointTrackingState.Tracked)
+                        {
+                            drawBrush = this.trackedJointBrush;
+                        }
+                        else if (rightHand.TrackingState == JointTrackingState.Inferred)
+                        {
+                            drawBrush = this.trackedJointBrush;
+                        }
+
+                        if (drawBrush != null)
+                        {
+                            dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
+                        }
+                    }
+                }
+                this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
             }
-
-            var skel = skeletons.FirstOrDefault(x => x.TrackingState == SkeletonTrackingState.Tracked);
-            if (skel == null)
-            {
-                return;
-            }
-
-            var rightHand = skel.Joints[JointType.WristRight];
-            var rightHandPosition = rightHand.Position;
-            XValueRight.Text = rightHand.Position.X.ToString(CultureInfo.InvariantCulture);
-            YValueRight.Text = rightHand.Position.Y.ToString(CultureInfo.InvariantCulture);
-            ZValueRight.Text = rightHand.Position.Z.ToString(CultureInfo.InvariantCulture);
-
-            var leftHand = skel.Joints[JointType.WristLeft];
-            var leftHandPosition = leftHand.Position;
-            XValueLeft.Text = leftHand.Position.X.ToString(CultureInfo.InvariantCulture);
-            YValueLeft.Text = leftHand.Position.Y.ToString(CultureInfo.InvariantCulture);
-            ZValueLeft.Text = leftHand.Position.Z.ToString(CultureInfo.InvariantCulture);
-            imageCanvas.Background = Brushes.PapayaWhip;
-
-            var mapper = new CoordinateMapper(sensor);
-            var colorPoint = mapper.MapSkeletonPointToColorPoint(rightHandPosition, ColorImageFormat.RgbResolution640x480Fps30);
-
-            var circle = CreateCircle(colorPoint);
-            imageCanvas.Children.Add(circle);
-
-
-            //var centreHip = sknel.Joints[JointType.HipCenter];
-
-            //if (centreHip.Position.Z - rightHand.Position.Z > 0.3)
-            //{
-            //    RightRaised.Text = "Raised";
-            //}
-            //else if (centreHip.Position.Z - leftHand.Position.Z > 0.3)
-            //{
-            //    LeftRaised.Text = "Raised";
-            //}
-            //else
-            //{
-            //    LeftRaised.Text = "Lowered";
-            //    RightRaised.Text = "Lowered";
-            //}
         }
-        private Shape CreateCircle(ColorImagePoint colorPoint)
+
+        private Point SkeletonPointToScreen(SkeletonPoint skelpoint)
         {
-            var circle = new Ellipse();
-            circle.Fill = Brushes.Red;
-            circle.Height = 20;
-            circle.Width = 20;
-            circle.Stroke = Brushes.Red;
-
-            Canvas.SetLeft(circle, colorPoint.X);
-            Canvas.SetTop(circle, colorPoint.Y);
-
-            return circle;
+            DepthImagePoint depthPoint = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skelpoint, DepthImageFormat.Resolution640x480Fps30);
+            return new Point(depthPoint.X, depthPoint.Y);
+        }
+        
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (null != this.sensor)
+            {
+                this.sensor.Stop();
+            }
         }
     }
 }
