@@ -19,3 +19,5 @@ G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\D
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Kinect.Toolkit.Interaction.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Kinect.xml
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp.csproj.CopyComplete
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Coding4Fun.Kinect.Wpf.dll
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Expression.Drawing.dll
