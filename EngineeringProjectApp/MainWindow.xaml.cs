@@ -34,6 +34,7 @@ namespace EngineeringProjectApp
         private KinectSensor sensor;
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
+        private Image test;
         const int height = 720;
         const int width = 960;
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
@@ -74,6 +75,7 @@ namespace EngineeringProjectApp
                 try
                 {
                     this.sensor.Start();
+                    AddItem(200, 300);
                 }
                 catch (IOException)
                 {
@@ -107,7 +109,13 @@ namespace EngineeringProjectApp
                 //String uri = "pack://EngineeringProjectApp:,,,/AssemblyName;component/Resources/Background.png";
                 //System.Drawing.Image image = bmp;
 
-                dc.DrawImage(new BitmapImage(new Uri("../../Resources/background.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
+
+                //dc.DrawImage(new BitmapImage(new Uri("pack://siteoforigin:,,,/Resources/Background.png", UriKind.Relative)), new Rect(0.0, 0.0, width, height));
+                //Uri uri = new Uri(Properties.Resources.Background.ToString(), UriKind.Relative);
+                //ImageSource imgSource = new BitmapImage(uri);
+                //this.Image.Source = imgSource;
+                //dc.DrawImage(imgSource, new Rect(0.0, 0.0, width, height));
+                dc.DrawImage(new BitmapImage(new Uri("../../Resources/Background.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
                 { 
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
@@ -122,12 +130,37 @@ namespace EngineeringProjectApp
                                 Brush drawBrush = this.trackedJointBrush;
                                 dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
                                 this.DrawTrasmorfedPoint(rightHand);
+                                this.MoveItem(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft],test);
+                                
                             }
                         }
                     }
                 }
                 this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
             }
+        }
+
+        private void MoveItem(Joint rightHand,Joint head, Joint leftHand,Image img) {
+            Point rightHandPoint = SkeletonPointToScreen(rightHand.Position);
+            Point leftHandPoint = SkeletonPointToScreen(leftHand.Position);
+            Point HeadPoint = SkeletonPointToScreen(head.Position);
+
+            if (leftHandPoint.Y < HeadPoint.Y) {
+                Canvas.SetLeft(img, rightHandPoint.X);
+                Canvas.SetTop(img, rightHandPoint.Y);
+            }
+        }
+        private void AddItem(int x, int y) {
+            BitmapImage testImage = new BitmapImage(new Uri("kolko.png", UriKind.Relative));
+            test = new Image
+            {
+                Height = 50,
+                Width = 50,
+                Source = testImage
+            };
+            mainCanva.Children.Add(test);
+            Canvas.SetLeft(test, x);
+            Canvas.SetTop(test, y);
         }
 
         private void DrawTrasmorfedPoint(Joint joint)
