@@ -34,8 +34,8 @@ namespace EngineeringProjectApp
         private KinectSensor sensor;
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
-        const float height = 480.0f;
-        const float width = 640.0f;
+        const int height = 720;
+        const int width = 960;
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public MainWindow()
         {
@@ -49,9 +49,9 @@ namespace EngineeringProjectApp
             {
                 smoothParameters.Smoothing = 0.7f;
                 smoothParameters.Correction = 0.3f;
-                smoothParameters.Prediction = 1.0f;
+                smoothParameters.Prediction = 0.5f;
                 smoothParameters.JitterRadius = 1.0f;
-                smoothParameters.MaxDeviationRadius = 1.0f;
+                smoothParameters.MaxDeviationRadius = 0.5f;
             }
             this.drawingGroup = new DrawingGroup();
             this.imageSource = new DrawingImage(this.drawingGroup);
@@ -101,41 +101,27 @@ namespace EngineeringProjectApp
                 //Stream myStream = myAssembly.GetManifestResourceStream("EngineeringProjectApp.images.background.bmp");
                 // Bitmap bmp = new Bitmap(myStream);
                 //Bitmap myImage = (Bitmap)Properties.Resources.ResourceManager.GetObject("backround.png");
-                Bitmap bmp = Properties.Resources.Background;
+                //Bitmap bmp = Properties.Resources.Background;
                 //dc.DrawImage(new BitmapImage(new Uri(Properties.Resources.Background));
                 //dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/AssemblyName;component/Resources/Background.png")), new Rect(0.0, 0.0,width,height));
                 //String uri = "pack://EngineeringProjectApp:,,,/AssemblyName;component/Resources/Background.png";
-                System.Drawing.Image image = bmp;
+                //System.Drawing.Image image = bmp;
 
-             
-
-                //dc.DrawImage(image.,new Rect(0.0,0.0,width,height));
                 dc.DrawImage(new BitmapImage(new Uri("../../Resources/background.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
-                {
-                   
+                { 
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
                     if (skel != null)
                     {
-                        Brush drawBrush = null;
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
                             var rightHand = skel.Joints[JointType.HandRight];
                             CheckBoundaries(this.SkeletonPointToScreen(rightHand.Position), dc);
-                            if (rightHand.TrackingState == JointTrackingState.Tracked)
+                            if (rightHand.TrackingState == JointTrackingState.Tracked || rightHand.TrackingState == JointTrackingState.Inferred)
                             {
-                                drawBrush = this.trackedJointBrush;
-                            }
-                            else if (rightHand.TrackingState == JointTrackingState.Inferred)
-                            {
-                                drawBrush = this.trackedJointBrush;
-                            }
-
-                            if (drawBrush != null)
-                            {
+                                Brush drawBrush = this.trackedJointBrush;
                                 dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
-                                //Canvas.SetLeft(OrangeDot,this.SkeletonPointToScreen(rightHand.Position).X);
-                                //Canvas.SetTop(OrangeDot, this.SkeletonPointToScreen(rightHand.Position).Y);
+                                this.DrawTrasmorfedPoint(rightHand);
                             }
                         }
                     }
@@ -144,7 +130,20 @@ namespace EngineeringProjectApp
             }
         }
 
-       
+        private void DrawTrasmorfedPoint(Joint joint)
+        {
+            Point point = SkeletonPointToScreen(joint.Position);
+            if (point.X <= width && point.X>=0)
+            {
+                Canvas.SetLeft(OrangeDot, point.X);
+            }
+            if (point.Y <= height  && point.Y>=0)
+            {
+                Canvas.SetTop(OrangeDot, point.Y);
+            }
+
+        }
+
         private Point SkeletonPointToScreen(SkeletonPoint skelpoint)
         {
             DepthImagePoint depthPoint = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skelpoint, DepthImageFormat.Resolution640x480Fps30);
@@ -158,9 +157,41 @@ namespace EngineeringProjectApp
                 this.sensor.Stop();
             }
         }
+        private void ClippedEdgesUpdates(Skeleton skeleton, DrawingContext drawingContext)
+        {
+            switch (skeleton.ClippedEdges)
+            {
+                case FrameEdges.Bottom:
+                    drawingContext.DrawRectangle(
+                    Brushes.Red,
+                    null,
+                    new Rect(0, height - 10.0f, width, 10.0f));
+                    break;
+                case FrameEdges.Left:
+                    drawingContext.DrawRectangle(
+                    Brushes.Red,
+                    null,
+                    new Rect(0, 0, 10.0f, height));
+                    break;
+                case FrameEdges.Right:
+                    drawingContext.DrawRectangle(
+                    Brushes.Red,
+                    null,
+                    new Rect(width - 10.0f, 0, 10.0f, width));
+                    break;
+                case FrameEdges.Top:
+                    drawingContext.DrawRectangle(
+                         Brushes.Red,
+                         null,
+                         new Rect(0, 0, width, 10.0f));
+                    break;
+                default:
+                    break;
+            }
+        }
         private void CheckBoundaries(Point jointPoint, DrawingContext drawingContext)
         {
-            if (jointPoint.Y>=470)
+            if (jointPoint.Y>=height-10)
             {
                 //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
@@ -190,7 +221,7 @@ namespace EngineeringProjectApp
                 
             }
 
-            if (jointPoint.X >= 630)
+            if (jointPoint.X >= width-10)
             {
                 //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
