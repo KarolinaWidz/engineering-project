@@ -7,14 +7,18 @@
         xmlns:local="clr-namespace:EngineeringProjectApp" 
         mc:Ignorable="d"
         Title="MainWindow" WindowState="Maximized">
+
     <!--Height="735" Width="770"-->
     <Grid>
+
         <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="kinectChooser" >
 
         </k:KinectSensorChooserUI>
 
-        <!--<Label x:Name="kinectStatusLbl" Content="Current Kinect Status" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" />-->
-        <Image Name="Image"  Margin="0,0,0,0" Stretch="Uniform"/>
-        
+       <Image Name="Image"  Margin="0,0,0,0"  Stretch="Uniform" Source="/Resources/Background.png"/>
+        <Canvas Background="Transparent" Margin="0,0,0,0" Name="mainCanva" Width="{Binding Path=ActualWidth, ElementName=Image}" Height="{Binding Path=ActualHeight, ElementName=Image}">
+            <Ellipse Fill="OrangeRed"  Name="OrangeDot" Stretch="Uniform" Canvas.Left="0" Canvas.Top="0" Width="20" Height="20"/>
+        </Canvas>
+
     </Grid>
 </Window>

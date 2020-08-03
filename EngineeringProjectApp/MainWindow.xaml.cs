@@ -19,6 +19,13 @@ using Microsoft.Kinect.Toolkit.Interaction;
 using System.Globalization;
 using System.IO;
 using Coding4Fun.Kinect.Wpf;
+using System.Reflection;
+using System.Drawing;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Point = System.Windows.Point;
+using Color = System.Windows.Media.Color;
+using Image = System.Windows.Controls.Image;
 
 namespace EngineeringProjectApp
 {
@@ -38,6 +45,14 @@ namespace EngineeringProjectApp
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            TransformSmoothParameters smoothParameters = new TransformSmoothParameters();
+            {
+                smoothParameters.Smoothing = 0.7f;
+                smoothParameters.Correction = 0.3f;
+                smoothParameters.Prediction = 1.0f;
+                smoothParameters.JitterRadius = 1.0f;
+                smoothParameters.MaxDeviationRadius = 1.0f;
+            }
             this.drawingGroup = new DrawingGroup();
             this.imageSource = new DrawingImage(this.drawingGroup);
             Image.Source = this.imageSource;
@@ -53,7 +68,7 @@ namespace EngineeringProjectApp
 
             if (null != this.sensor)
             {
-                this.sensor.SkeletonStream.Enable();
+                this.sensor.SkeletonStream.Enable(smoothParameters);
                 this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
 
                 try
@@ -82,16 +97,30 @@ namespace EngineeringProjectApp
 
             using (DrawingContext dc = this.drawingGroup.Open())
             {
-                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, width , height));
+                //Assembly myAssembly = Assembly.GetExecutingAssembly();
+                //Stream myStream = myAssembly.GetManifestResourceStream("EngineeringProjectApp.images.background.bmp");
+                // Bitmap bmp = new Bitmap(myStream);
+                //Bitmap myImage = (Bitmap)Properties.Resources.ResourceManager.GetObject("backround.png");
+                Bitmap bmp = Properties.Resources.Background;
+                //dc.DrawImage(new BitmapImage(new Uri(Properties.Resources.Background));
+                //dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/AssemblyName;component/Resources/Background.png")), new Rect(0.0, 0.0,width,height));
+                //String uri = "pack://EngineeringProjectApp:,,,/AssemblyName;component/Resources/Background.png";
+                System.Drawing.Image image = bmp;
+
+             
+
+                //dc.DrawImage(image.,new Rect(0.0,0.0,width,height));
+                dc.DrawImage(new BitmapImage(new Uri("../../Resources/background.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
                 {
+                   
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
                     if (skel != null)
                     {
                         Brush drawBrush = null;
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            var rightHand = skel.Joints[JointType.WristRight];
+                            var rightHand = skel.Joints[JointType.HandRight];
                             CheckBoundaries(this.SkeletonPointToScreen(rightHand.Position), dc);
                             if (rightHand.TrackingState == JointTrackingState.Tracked)
                             {
@@ -105,6 +134,8 @@ namespace EngineeringProjectApp
                             if (drawBrush != null)
                             {
                                 dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
+                                //Canvas.SetLeft(OrangeDot,this.SkeletonPointToScreen(rightHand.Position).X);
+                                //Canvas.SetTop(OrangeDot, this.SkeletonPointToScreen(rightHand.Position).Y);
                             }
                         }
                     }
@@ -113,6 +144,7 @@ namespace EngineeringProjectApp
             }
         }
 
+       
         private Point SkeletonPointToScreen(SkeletonPoint skelpoint)
         {
             DepthImagePoint depthPoint = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skelpoint, DepthImageFormat.Resolution640x480Fps30);
@@ -130,34 +162,42 @@ namespace EngineeringProjectApp
         {
             if (jointPoint.Y>=470)
             {
+                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
                     new Rect(0, height - 10.0f, width, 10.0f));
+                
             }
 
             if (jointPoint.Y <= 10)
             {
+                // System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
                     new Rect(0, 0, width, 10.0f));
+                
             }
 
             if (jointPoint.X <= 10)
             {
+                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
                     new Rect(0, 0, 10.0f, height));
+                
             }
 
             if (jointPoint.X >= 630)
             {
+                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
                     new Rect(width - 10.0f, 0, 10.0f, width));
+                
             }
         }
     }
