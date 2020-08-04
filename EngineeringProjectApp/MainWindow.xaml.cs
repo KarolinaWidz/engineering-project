@@ -37,6 +37,7 @@ namespace EngineeringProjectApp
         private Image test;
         const int height = 720;
         const int width = 960;
+        private Image [] imagesArray;
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public MainWindow()
         {
@@ -75,7 +76,9 @@ namespace EngineeringProjectApp
                 try
                 {
                     this.sensor.Start();
-                    AddItem(200, 300, Item.Bird);
+                    AddManyItems();
+                    //test = AddItem(200, 300, Item.Bird, test);
+                    
                     //AddItem(300, 300, Item.Butterfly);
                 }
                 catch (IOException)
@@ -131,13 +134,28 @@ namespace EngineeringProjectApp
                                 Brush drawBrush = this.trackedJointBrush;
                                 dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
                                 this.DrawTrasmorfedPoint(rightHand);
-                                this.MoveItem(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft],test);
+                                this.MoveItem(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft],imagesArray[0]);
                                 
                             }
                         }
                     }
                 }
                 this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
+            }
+        }
+
+        private void AddManyItems() {
+            this.imagesArray = new Image[20];
+            Random r = new Random();
+            for (int i=0;i<imagesArray.Length;i++) {
+                int randomWidth = r.Next(260, 720);
+                int randomHeight = r.Next(40, 550);
+                if (i % 2 == 0) {
+                    imagesArray[i] = AddItem(randomWidth, randomHeight, Item.Bird,imagesArray[i]);
+                }
+                else {
+                    imagesArray[i] = AddItem(randomWidth, randomHeight, Item.Butterfly, imagesArray[i]);
+                }
             }
         }
 
@@ -151,21 +169,22 @@ namespace EngineeringProjectApp
                 Canvas.SetTop(img, rightHandPoint.Y);
             }
         }
-        private void AddItem(int x, int y, Item item) {
+        private Image AddItem(int x, int y, Item item, Image image) {
             BitmapImage testImage=null;
             switch (item) {
                 case Item.Butterfly: testImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
                 case Item.Bird: testImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
             }
-            test = new Image
+            image = new Image
             {
                 Height = 50,
                 Width = 50,
                 Source = testImage
             };
-            mainCanva.Children.Add(test);
-            Canvas.SetLeft(test, x);
-            Canvas.SetTop(test, y);
+            mainCanva.Children.Add(image);
+            Canvas.SetLeft(image, x);
+            Canvas.SetTop(image, y);
+            return image;
         }
 
         private void DrawTrasmorfedPoint(Joint joint)
