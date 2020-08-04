@@ -151,7 +151,7 @@ namespace EngineeringProjectApp
             }
         }
         private void AddItem(int x, int y) {
-            BitmapImage testImage = new BitmapImage(new Uri("kolko.png", UriKind.Relative));
+            BitmapImage testImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative));
             test = new Image
             {
                 Height = 50,
