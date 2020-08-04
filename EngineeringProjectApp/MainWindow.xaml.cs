@@ -75,7 +75,8 @@ namespace EngineeringProjectApp
                 try
                 {
                     this.sensor.Start();
-                    AddItem(200, 300);
+                    AddItem(200, 300, Item.Bird);
+                    //AddItem(300, 300, Item.Butterfly);
                 }
                 catch (IOException)
                 {
@@ -150,8 +151,12 @@ namespace EngineeringProjectApp
                 Canvas.SetTop(img, rightHandPoint.Y);
             }
         }
-        private void AddItem(int x, int y) {
-            BitmapImage testImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative));
+        private void AddItem(int x, int y, Item item) {
+            BitmapImage testImage=null;
+            switch (item) {
+                case Item.Butterfly: testImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
+                case Item.Bird: testImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
+            }
             test = new Image
             {
                 Height = 50,
