@@ -37,7 +37,8 @@ namespace EngineeringProjectApp
         private Image test;
         const int height = 720;
         const int width = 960;
-        private Image [] imagesArray;
+        private Boolean isDrag = false;
+        private Item[] itemsArray;
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public MainWindow()
         {
@@ -77,9 +78,6 @@ namespace EngineeringProjectApp
                 {
                     this.sensor.Start();
                     AddManyItems();
-                    //test = AddItem(200, 300, Item.Bird, test);
-                    
-                    //AddItem(300, 300, Item.Butterfly);
                 }
                 catch (IOException)
                 {
@@ -131,11 +129,10 @@ namespace EngineeringProjectApp
                             CheckBoundaries(this.SkeletonPointToScreen(rightHand.Position), dc);
                             if (rightHand.TrackingState == JointTrackingState.Tracked || rightHand.TrackingState == JointTrackingState.Inferred)
                             {
-                                Brush drawBrush = this.trackedJointBrush;
-                                dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
+                                //Brush drawBrush = this.trackedJointBrush;
+                                //dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
                                 this.DrawTrasmorfedPoint(rightHand);
-                                this.MoveItem(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft],imagesArray[0]);
-                                
+                                this.ScanItems(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft]);
                             }
                         }
                     }
@@ -145,46 +142,70 @@ namespace EngineeringProjectApp
         }
 
         private void AddManyItems() {
-            this.imagesArray = new Image[20];
+            this.itemsArray = new Item[5];
             Random r = new Random();
-            for (int i=0;i<imagesArray.Length;i++) {
+            for (int i=0;i<this.itemsArray.Length;i++) {
                 int randomWidth = r.Next(260, 720);
                 int randomHeight = r.Next(40, 550);
                 if (i % 2 == 0) {
-                    imagesArray[i] = AddItem(randomWidth, randomHeight, Item.Bird,imagesArray[i]);
+                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.Bird));
                 }
                 else {
-                    imagesArray[i] = AddItem(randomWidth, randomHeight, Item.Butterfly, imagesArray[i]);
+                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.Butterfly));
                 }
             }
         }
 
-        private void MoveItem(Joint rightHand,Joint head, Joint leftHand,Image img) {
+        private void ScanItems(Joint rightHand, Joint head, Joint leftHand) {
             Point rightHandPoint = SkeletonPointToScreen(rightHand.Position);
             Point leftHandPoint = SkeletonPointToScreen(leftHand.Position);
             Point HeadPoint = SkeletonPointToScreen(head.Position);
 
-            if (leftHandPoint.Y < HeadPoint.Y) {
-                Canvas.SetLeft(img, rightHandPoint.X);
-                Canvas.SetTop(img, rightHandPoint.Y);
+            if (leftHandPoint.Y < HeadPoint.Y)
+            {
+                for (int i = 0; i < this.itemsArray.Length; i++)
+                {
+                    if (rightHandPoint.X <= (this.itemsArray[i].getX() + 25) && rightHandPoint.X >= (this.itemsArray[i].getX() - 25)
+                        && rightHandPoint.Y <= (this.itemsArray[i].getY() + 25) && rightHandPoint.Y >= (this.itemsArray[i].getY() - 25))
+                    {
+                        MoveItem(rightHandPoint, HeadPoint, leftHandPoint, this.itemsArray[i]);
+                        break;
+                    }
+                }
             }
+            else { OrangeDot.Fill = new SolidColorBrush(Colors.OrangeRed);
+            }
+
         }
-        private Image AddItem(int x, int y, Item item, Image image) {
-            BitmapImage testImage=null;
-            switch (item) {
-                case Item.Butterfly: testImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
-                case Item.Bird: testImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
+
+        private void MoveItem(Point rightHandPoint, Point HeadPoint, Point leftHandPoint, Item item) {
+
+            OrangeDot.Fill = new SolidColorBrush(Colors.BlueViolet);
+            Canvas.SetLeft(item.getImage(), rightHandPoint.X);
+            Canvas.SetTop(item.getImage(), rightHandPoint.Y);
+            item.setX((float)rightHandPoint.X);
+            item.setY((float)rightHandPoint.Y);
+
+        }
+
+        private Item AddItem(int x, int y, Item item) {
+            BitmapImage bitmapImage=null;
+            switch (item.getItemType()) {
+                case ItemType.Butterfly: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
+                case ItemType.Bird: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
             }
-            image = new Image
+            item.setImage(new Image
             {
                 Height = 50,
                 Width = 50,
-                Source = testImage
-            };
-            mainCanva.Children.Add(image);
-            Canvas.SetLeft(image, x);
-            Canvas.SetTop(image, y);
-            return image;
+                Source = bitmapImage
+            });
+            mainCanva.Children.Add(item.getImage());
+            Canvas.SetLeft(item.getImage(), x);
+            Canvas.SetTop(item.getImage(), y);
+            item.setX(x);
+            item.setY(y);
+            return item;
         }
 
         private void DrawTrasmorfedPoint(Joint joint)
