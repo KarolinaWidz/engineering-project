@@ -34,12 +34,11 @@ namespace EngineeringProjectApp
         private KinectSensor sensor;
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
-        private Image test;
+        const int scaleHeight = 700;
+        const int scaleWidth = 940;
         const int height = 720;
         const int width = 960;
-        private Boolean isDrag = false;
         private Item[] itemsArray;
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
         public MainWindow()
         {
             InitializeComponent();
@@ -117,7 +116,7 @@ namespace EngineeringProjectApp
                 //ImageSource imgSource = new BitmapImage(uri);
                 //this.Image.Source = imgSource;
                 //dc.DrawImage(imgSource, new Rect(0.0, 0.0, width, height));
-                dc.DrawImage(new BitmapImage(new Uri("../../Resources/Background.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
+                dc.DrawImage(new BitmapImage(new Uri("../../Resources/backgroundImage.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
                 { 
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
@@ -126,11 +125,9 @@ namespace EngineeringProjectApp
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
                             var rightHand = skel.Joints[JointType.HandRight];
-                            CheckBoundaries(this.SkeletonPointToScreen(rightHand.Position), dc);
+                            CheckBoundaries(rightHand, dc);
                             if (rightHand.TrackingState == JointTrackingState.Tracked || rightHand.TrackingState == JointTrackingState.Inferred)
                             {
-                                //Brush drawBrush = this.trackedJointBrush;
-                                //dc.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(rightHand.Position), 10.0f, 10.0f);
                                 this.DrawTrasmorfedPoint(rightHand);
                                 this.ScanItems(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft]);
                             }
@@ -157,16 +154,18 @@ namespace EngineeringProjectApp
         }
 
         private void ScanItems(Joint rightHand, Joint head, Joint leftHand) {
-            Point rightHandPoint = SkeletonPointToScreen(rightHand.Position);
-            Point leftHandPoint = SkeletonPointToScreen(leftHand.Position);
-            Point HeadPoint = SkeletonPointToScreen(head.Position);
 
-            if (leftHandPoint.Y < HeadPoint.Y)
+            Joint rightHandPoint = rightHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            Joint leftHandPoint = leftHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            Joint HeadPoint = head.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            int shift = 25;
+
+            if (leftHandPoint.Position.Y < HeadPoint.Position.Y)
             {
                 for (int i = 0; i < this.itemsArray.Length; i++)
                 {
-                    if (rightHandPoint.X <= (this.itemsArray[i].getX() + 25) && rightHandPoint.X >= (this.itemsArray[i].getX() - 25)
-                        && rightHandPoint.Y <= (this.itemsArray[i].getY() + 25) && rightHandPoint.Y >= (this.itemsArray[i].getY() - 25))
+                    if (rightHandPoint.Position.X <= (this.itemsArray[i].getX() + shift) && rightHandPoint.Position.X >= (this.itemsArray[i].getX() - shift)
+                        && rightHandPoint.Position.Y <= (this.itemsArray[i].getY() + shift) && rightHandPoint.Position.Y >= (this.itemsArray[i].getY() - shift))
                     {
                         MoveItem(rightHandPoint, HeadPoint, leftHandPoint, this.itemsArray[i]);
                         break;
@@ -177,14 +176,21 @@ namespace EngineeringProjectApp
             }
 
         }
-
-        private void MoveItem(Point rightHandPoint, Point HeadPoint, Point leftHandPoint, Item item) {
-
+        private void MoveItem(Joint rightHandPoint, Joint HeadPoint, Joint leftHandPoint, Item item)
+        {
+            int offset = 50;
+     
             OrangeDot.Fill = new SolidColorBrush(Colors.BlueViolet);
-            Canvas.SetLeft(item.getImage(), rightHandPoint.X);
-            Canvas.SetTop(item.getImage(), rightHandPoint.Y);
-            item.setX((float)rightHandPoint.X);
-            item.setY((float)rightHandPoint.Y);
+            if (rightHandPoint.Position.X <= width - offset)
+            {
+                Canvas.SetLeft(item.getImage(), rightHandPoint.Position.X);
+                item.setX((float)rightHandPoint.Position.X);
+            }
+            if (rightHandPoint.Position.Y <= height - offset)
+            {
+                Canvas.SetTop(item.getImage(), rightHandPoint.Position.Y);
+                item.setY((float)rightHandPoint.Position.Y);
+            }
 
         }
 
@@ -210,22 +216,16 @@ namespace EngineeringProjectApp
 
         private void DrawTrasmorfedPoint(Joint joint)
         {
-            Point point = SkeletonPointToScreen(joint.Position);
-            if (point.X <= width && point.X>=0)
+            Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight,0.25f,0.25f);
+            if (scaledJoint.Position.X <= width && scaledJoint.Position.X>=0)
             {
-                Canvas.SetLeft(OrangeDot, point.X);
+                Canvas.SetLeft(OrangeDot, scaledJoint.Position.X);
             }
-            if (point.Y <= height  && point.Y>=0)
+            if (scaledJoint.Position.Y <= height  && scaledJoint.Position.Y>=0)
             {
-                Canvas.SetTop(OrangeDot, point.Y);
+                Canvas.SetTop(OrangeDot, scaledJoint.Position.Y);
             }
 
-        }
-
-        private Point SkeletonPointToScreen(SkeletonPoint skelpoint)
-        {
-            DepthImagePoint depthPoint = this.sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skelpoint, DepthImageFormat.Resolution640x480Fps30);
-            return new Point(depthPoint.X, depthPoint.Y);
         }
         
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -235,43 +235,13 @@ namespace EngineeringProjectApp
                 this.sensor.Stop();
             }
         }
-        private void ClippedEdgesUpdates(Skeleton skeleton, DrawingContext drawingContext)
+       
+        private void CheckBoundaries(Joint joint, DrawingContext drawingContext)
         {
-            switch (skeleton.ClippedEdges)
+            int offset = 30;
+            Joint scaledJoint = joint.ScaleTo(940, 700, 0.25f, 0.25f);
+            if (scaledJoint.Position.Y>=height- offset)
             {
-                case FrameEdges.Bottom:
-                    drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(0, height - 10.0f, width, 10.0f));
-                    break;
-                case FrameEdges.Left:
-                    drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(0, 0, 10.0f, height));
-                    break;
-                case FrameEdges.Right:
-                    drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(width - 10.0f, 0, 10.0f, width));
-                    break;
-                case FrameEdges.Top:
-                    drawingContext.DrawRectangle(
-                         Brushes.Red,
-                         null,
-                         new Rect(0, 0, width, 10.0f));
-                    break;
-                default:
-                    break;
-            }
-        }
-        private void CheckBoundaries(Point jointPoint, DrawingContext drawingContext)
-        {
-            if (jointPoint.Y>=height-10)
-            {
-                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
@@ -279,9 +249,8 @@ namespace EngineeringProjectApp
                 
             }
 
-            if (jointPoint.Y <= 10)
+            if (scaledJoint.Position.Y <= offset)
             {
-                // System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
@@ -289,9 +258,8 @@ namespace EngineeringProjectApp
                 
             }
 
-            if (jointPoint.X <= 10)
+            if (scaledJoint.Position.X <= offset)
             {
-                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
@@ -299,9 +267,8 @@ namespace EngineeringProjectApp
                 
             }
 
-            if (jointPoint.X >= width-10)
+            if (scaledJoint.Position.X >= width- offset)
             {
-                //System.Media.SystemSounds.Asterisk.Play();
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
