@@ -10,29 +10,36 @@ namespace EngineeringProjectApp
     class Item
     {
         private ItemType itemType;
+        private double startX;
+        private double startY;
         private double x;
         private double y;
         private Image image;
+        private Position actualPosition;
+        private Position targetPosition;
 
-        public Item(ItemType itemType)
+        public Item(ItemType itemType, Position targetPosition)
         {
             this.itemType = itemType;
-        }
-
-        public Item(ItemType itemType, double x, double y, Image image) {
-            this.itemType = itemType;
-            this.x = x;
-            this.y = y;
-            this.image = image;
+            this.actualPosition = Position.OTHER;
+            this.targetPosition = targetPosition;
         }
 
         public ItemType getItemType() { return this.itemType; }
         public double getX() { return this.x; }
         public double getY() { return this.y; }
+        public double getStartX() { return this.startX; }
+        public double getStartY() { return this.startY; }
         public Image getImage() { return this.image; }
+        public Position getActualPosition() { return this.actualPosition; }
+        public Position getTargetPosition() { return this.targetPosition; }
         public void setItemType(ItemType itemType) { this.itemType = itemType; }
-        public void setX(float x) { this.x = x; }
-        public void setY(float y) { this.y = y; }
+        public void setX(double x) { this.x = x; }
+        public void setY(double y) { this.y = y; }
+        public void setStartX(double startX) { this.startX = startX; }
+        public void setStartY(double startY) { this.startY = startY; }
         public void setImage(Image image) { this.image = image; }
+        public void setActualPosition(Position actualPosition) { this.actualPosition = actualPosition; }
+
     }
 }

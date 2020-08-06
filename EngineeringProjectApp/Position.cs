@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace EngineeringProjectApp
 {
-    enum ItemType
+    enum Position
     {
-        BIRD,
-        BUTTERFLY
+        OTHER,
+        TREE,
+        SUNFLOWER
+        
     }
 }

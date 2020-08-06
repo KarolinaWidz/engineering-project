@@ -75,6 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="Item.cs" />
     <Compile Include="ItemType.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>

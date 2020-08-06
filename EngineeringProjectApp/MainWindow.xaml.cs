@@ -138,17 +138,50 @@ namespace EngineeringProjectApp
             }
         }
 
+        private void CheckPosition(Item item) {
+            if (item.getActualPosition()!= Position.OTHER && item.getActualPosition() != item.getTargetPosition())
+            {
+                Console.Beep();
+                Canvas.SetLeft(item.getImage(), item.getStartX());
+                Canvas.SetTop(item.getImage(), item.getStartY());
+
+            }
+            else {
+            }
+        }
+
+        private Position FindPosition(Item item) {
+            Position previousPosition = item.getActualPosition();
+            Position resultPosition;
+            if (item.getX() >= 10 && item.getX() <= 205
+                         && item.getY() >= 50 && item.getY() <= 360)
+            {
+                resultPosition = Position.TREE;
+
+            }
+            else if (item.getX() >= 690 && item.getX() <= 885
+                        && item.getY() >= 215 && item.getY() <= 395)
+            {
+                resultPosition = Position.SUNFLOWER;
+
+            }
+            else resultPosition = Position.OTHER;
+            this.CheckPosition(item);
+            return resultPosition;
+        }
+        
+       
         private void AddManyItems() {
             this.itemsArray = new Item[5];
             Random r = new Random();
             for (int i=0;i<this.itemsArray.Length;i++) {
-                int randomWidth = r.Next(260, 720);
-                int randomHeight = r.Next(40, 550);
+                int randomWidth = r.Next(210, 680);
+                int randomHeight = r.Next(40, 600);
                 if (i % 2 == 0) {
-                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.Bird));
+                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BIRD,Position.TREE));
                 }
                 else {
-                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.Butterfly));
+                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BUTTERFLY,Position.SUNFLOWER));
                 }
             }
         }
@@ -191,14 +224,14 @@ namespace EngineeringProjectApp
                 Canvas.SetTop(item.getImage(), rightHandPoint.Position.Y);
                 item.setY((float)rightHandPoint.Position.Y);
             }
-
+            item.setActualPosition(this.FindPosition(item));
         }
 
         private Item AddItem(int x, int y, Item item) {
             BitmapImage bitmapImage=null;
             switch (item.getItemType()) {
-                case ItemType.Butterfly: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
-                case ItemType.Bird: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
+                case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
+                case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
             }
             item.setImage(new Image
             {
@@ -211,6 +244,8 @@ namespace EngineeringProjectApp
             Canvas.SetTop(item.getImage(), y);
             item.setX(x);
             item.setY(y);
+            item.setStartX(x);
+            item.setStartY(y);
             return item;
         }
 
@@ -239,7 +274,7 @@ namespace EngineeringProjectApp
         private void CheckBoundaries(Joint joint, DrawingContext drawingContext)
         {
             int offset = 30;
-            Joint scaledJoint = joint.ScaleTo(940, 700, 0.25f, 0.25f);
+            Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             if (scaledJoint.Position.Y>=height- offset)
             {
                 drawingContext.DrawRectangle(
