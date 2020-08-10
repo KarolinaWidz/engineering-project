@@ -26,6 +26,8 @@ using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
+using System.Media;
+
 
 namespace EngineeringProjectApp
 {
@@ -130,6 +132,7 @@ namespace EngineeringProjectApp
                             {
                                 this.DrawTrasmorfedPoint(rightHand);
                                 this.ScanItems(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft]);
+                                
                             }
                         }
                     }
@@ -139,17 +142,55 @@ namespace EngineeringProjectApp
         }
 
         private void CheckPosition(Item item) {
-            if (item.getActualPosition()!= Position.OTHER && item.getActualPosition() != item.getTargetPosition())
+            if ((item.getActualPosition()!= Position.OTHER) && (item.getActualPosition() != item.getTargetPosition()))
             {
                 Console.Beep();
                 Canvas.SetLeft(item.getImage(), item.getStartX());
                 Canvas.SetTop(item.getImage(), item.getStartY());
+                item.setActualPosition(Position.OTHER);
+                item.setX(item.getStartX());
+                item.setY(item.getStartY());
 
             }
-            else {
+            if(item.getActualPosition() == item.getTargetPosition())
+            {
+                item.setCorrectPosition();
+                CheckFinallyCondition();
             }
         }
 
+        private bool CheckFinallyCondition() {
+            bool resultCondition = true;
+            for (int i = 0; i < itemsArray.Length; i++) {
+                if (itemsArray[i].getCorrectPosition() == false) {
+                    resultCondition = false;
+                }
+            }
+            if (resultCondition == true) {
+                ShowFinalScene();
+            }
+            return resultCondition;
+        }
+
+        private void ShowFinalScene() {
+            BitmapImage bitmapImage = new BitmapImage(new Uri("balloonsImage.png", UriKind.Relative));
+            Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
+            Label label = new Label
+            {
+                Content = "Ukończono poziom: łatwy",
+                FontSize = 30
+                
+            };
+            
+            mainCanva.Children.Add(image);
+            mainCanva.Children.Add(label);
+            Canvas.SetTop(label, height/5*3);
+            Canvas.SetLeft(label, width/3);
+            Canvas.SetLeft(image, 0);
+            Canvas.SetTop(image, 0);
+            SoundPlayer soundPlayerAction = new SoundPlayer(Properties.Resources.fanfareSound);
+            soundPlayerAction.PlaySync();
+        }
         private Position FindPosition(Item item) {
             Position previousPosition = item.getActualPosition();
             Position resultPosition;
@@ -172,7 +213,7 @@ namespace EngineeringProjectApp
         
        
         private void AddManyItems() {
-            this.itemsArray = new Item[5];
+            this.itemsArray = new Item[3];
             Random r = new Random();
             for (int i=0;i<this.itemsArray.Length;i++) {
                 int randomWidth = r.Next(210, 680);

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace EngineeringProjectApp
 {
     /// <summary>
-    /// Logika interakcji dla klasy UserControl1.xaml
+    /// Logika interakcji dla klasy Menu.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class Menu : UserControl
     {
-        public UserControl1()
+        public Menu()
         {
             InitializeComponent();
         }

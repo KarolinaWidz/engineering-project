@@ -21,5 +21,5 @@ G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\D
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp.csproj.CopyComplete
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Coding4Fun.Kinect.Wpf.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Expression.Drawing.dll
-G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\UserControl1.g.cs
-G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\UserControl1.baml
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\Menu.g.cs
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\Menu.baml

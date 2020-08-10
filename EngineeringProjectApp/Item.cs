@@ -17,12 +17,14 @@ namespace EngineeringProjectApp
         private Image image;
         private Position actualPosition;
         private Position targetPosition;
+        private bool correctPosition;
 
         public Item(ItemType itemType, Position targetPosition)
         {
             this.itemType = itemType;
             this.actualPosition = Position.OTHER;
             this.targetPosition = targetPosition;
+            this.correctPosition = false;
         }
 
         public ItemType getItemType() { return this.itemType; }
@@ -33,6 +35,7 @@ namespace EngineeringProjectApp
         public Image getImage() { return this.image; }
         public Position getActualPosition() { return this.actualPosition; }
         public Position getTargetPosition() { return this.targetPosition; }
+        public bool getCorrectPosition() { return this.correctPosition; }
         public void setItemType(ItemType itemType) { this.itemType = itemType; }
         public void setX(double x) { this.x = x; }
         public void setY(double y) { this.y = y; }
@@ -40,6 +43,7 @@ namespace EngineeringProjectApp
         public void setStartY(double startY) { this.startY = startY; }
         public void setImage(Image image) { this.image = image; }
         public void setActualPosition(Position actualPosition) { this.actualPosition = actualPosition; }
+        public void setCorrectPosition() { this.correctPosition = true; }
 
     }
 }

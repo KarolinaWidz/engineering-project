@@ -124,10 +124,16 @@
   <data name="backgroundImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\backgroundImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="balloonsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\balloonsImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="birdImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\birdImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="butterflyImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\butterflyImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fanfareSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fanfareSound.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
