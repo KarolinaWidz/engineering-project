@@ -8,7 +8,24 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="370,400,0,0" VerticalAlignment="Top" Width="75"/>
-
+        <Button Content="Rozpocznij grę" HorizontalAlignment="Left" Margin="370,399,0,0" VerticalAlignment="Top" Width="92" Click="Button_Click"/>
+        <ComboBox Name="DificultyLevelComboBox" HorizontalAlignment="Left" Margin="154,54,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Łatwy" IsSelected="True"/>
+            <ComboBoxItem Content="Średni"/>
+            <ComboBoxItem Content="Trudny"/>
+        </ComboBox>
+        <Label Content="Ilość ptaszków:" HorizontalAlignment="Left" Margin="58,85,0,0" VerticalAlignment="Top"/>
+        <Label Content="Poziom trudności:" HorizontalAlignment="Left" Margin="43,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.51,0.846" Width="104"/>
+        <Label Content="Ilość motylków:" HorizontalAlignment="Left" Margin="56,119,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="ReturningCheckBox" Content="Powrót zwierzątek" HorizontalAlignment="Left" Margin="295,56,0,0" VerticalAlignment="Top" Height="22"/>
+        <Slider  Name="AmountOfBirdsSlider" HorizontalAlignment="Left" Margin="154,93,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="20" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        <Slider  Name="AmountOfButterfliesSlider" HorizontalAlignment="Left" Margin="154,127,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="20" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        <TextBox Name ="AmountOfButterfliesBox" Text="{Binding ElementName=AmountOfButterfliesSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"  IsReadOnly="True"/>
+        <TextBox Name ="AmountOfBirdsBox" Text="{Binding ElementName=AmountOfBirdsSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
+        <Label Content="Wybór ręki:" HorizontalAlignment="Left" Margin="77,160,0,0" VerticalAlignment="Top"/>
+        <ComboBox Name="HandComboBox" HorizontalAlignment="Left" Margin="154,164,0,0" VerticalAlignment="Top" Width="120" Text="Prawa">
+            <ComboBoxItem Content="Prawa" IsSelected="True"/>
+            <ComboBoxItem Content="Lewa"/>
+        </ComboBox>
     </Grid>
 </UserControl>

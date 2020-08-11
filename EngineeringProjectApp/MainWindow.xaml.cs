@@ -41,10 +41,16 @@ namespace EngineeringProjectApp
         const int height = 720;
         const int width = 960;
         private Item[] itemsArray;
-        public MainWindow()
+        private int amountOfBirds;
+        private int amountOfButterflies;
+        private string hand;
+        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand)
         {
             InitializeComponent();
             Loaded += WindowLoaded;
+            this.amountOfBirds = amountOfBirds;
+            this.amountOfButterflies = amountOfButterflies;
+            this.hand = hand;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -126,12 +132,22 @@ namespace EngineeringProjectApp
                     {
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            var rightHand = skel.Joints[JointType.HandRight];
-                            CheckBoundaries(rightHand, dc);
-                            if (rightHand.TrackingState == JointTrackingState.Tracked || rightHand.TrackingState == JointTrackingState.Inferred)
+                            Joint mainHand;
+                            Joint otherHand;
+                            if (this.hand == "Prawa")
                             {
-                                this.DrawTrasmorfedPoint(rightHand);
-                                this.ScanItems(rightHand, skel.Joints[JointType.Head], skel.Joints[JointType.HandLeft]);
+                                mainHand = skel.Joints[JointType.HandRight];
+                                otherHand = skel.Joints[JointType.HandLeft];
+                            }
+                            else {
+                                mainHand = skel.Joints[JointType.HandLeft];
+                                otherHand = skel.Joints[JointType.HandRight];
+                            }
+                            CheckBoundaries(mainHand, dc);
+                            if (mainHand.TrackingState == JointTrackingState.Tracked || mainHand.TrackingState == JointTrackingState.Inferred)
+                            {
+                                this.DrawTrasmorfedPoint(mainHand);
+                                this.ScanItems(mainHand, skel.Joints[JointType.Head], otherHand);
                                 
                             }
                         }
@@ -210,38 +226,40 @@ namespace EngineeringProjectApp
             this.CheckPosition(item);
             return resultPosition;
         }
-        
-       
+
+
         private void AddManyItems() {
-            this.itemsArray = new Item[3];
+            this.itemsArray = new Item[amountOfButterflies + amountOfBirds];
             Random r = new Random();
-            for (int i=0;i<this.itemsArray.Length;i++) {
-                int randomWidth = r.Next(210, 680);
-                int randomHeight = r.Next(40, 600);
-                if (i % 2 == 0) {
-                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BIRD,Position.TREE));
-                }
-                else {
-                    itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BUTTERFLY,Position.SUNFLOWER));
-                }
+            int randomWidth, randomHeight;
+            for (int i = 0; i < this.amountOfBirds; i++) {
+                randomWidth = r.Next(210, 680);
+                randomHeight = r.Next(40, 600);
+                itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BIRD, Position.TREE));
             }
+            for (int i = this.amountOfBirds; i < itemsArray.Length; i++) {
+                randomWidth = r.Next(210, 680);
+                randomHeight = r.Next(40, 600);
+                itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BUTTERFLY, Position.SUNFLOWER));
+            }
+           
         }
 
-        private void ScanItems(Joint rightHand, Joint head, Joint leftHand) {
+        private void ScanItems(Joint mainHand, Joint head, Joint otherHand) {
 
-            Joint rightHandPoint = rightHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
-            Joint leftHandPoint = leftHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            Joint mainHandPoint = mainHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            Joint otherHandPoint = otherHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             Joint HeadPoint = head.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             int shift = 25;
 
-            if (leftHandPoint.Position.Y < HeadPoint.Position.Y)
+            if (otherHandPoint.Position.Y < HeadPoint.Position.Y)
             {
                 for (int i = 0; i < this.itemsArray.Length; i++)
                 {
-                    if (rightHandPoint.Position.X <= (this.itemsArray[i].getX() + shift) && rightHandPoint.Position.X >= (this.itemsArray[i].getX() - shift)
-                        && rightHandPoint.Position.Y <= (this.itemsArray[i].getY() + shift) && rightHandPoint.Position.Y >= (this.itemsArray[i].getY() - shift))
+                    if (mainHandPoint.Position.X <= (this.itemsArray[i].getX() + shift) && mainHandPoint.Position.X >= (this.itemsArray[i].getX() - shift)
+                        && mainHandPoint.Position.Y <= (this.itemsArray[i].getY() + shift) && mainHandPoint.Position.Y >= (this.itemsArray[i].getY() - shift))
                     {
-                        MoveItem(rightHandPoint, HeadPoint, leftHandPoint, this.itemsArray[i]);
+                        MoveItem(mainHandPoint, this.itemsArray[i]);
                         break;
                     }
                 }
@@ -250,20 +268,20 @@ namespace EngineeringProjectApp
             }
 
         }
-        private void MoveItem(Joint rightHandPoint, Joint HeadPoint, Joint leftHandPoint, Item item)
+        private void MoveItem(Joint mainHandJoint, Item item)
         {
             int offset = 50;
      
             OrangeDot.Fill = new SolidColorBrush(Colors.BlueViolet);
-            if (rightHandPoint.Position.X <= width - offset)
+            if (mainHandJoint.Position.X <= width - offset)
             {
-                Canvas.SetLeft(item.getImage(), rightHandPoint.Position.X);
-                item.setX((float)rightHandPoint.Position.X);
+                Canvas.SetLeft(item.getImage(), mainHandJoint.Position.X);
+                item.setX((float)mainHandJoint.Position.X);
             }
-            if (rightHandPoint.Position.Y <= height - offset)
+            if (mainHandJoint.Position.Y <= height - offset)
             {
-                Canvas.SetTop(item.getImage(), rightHandPoint.Position.Y);
-                item.setY((float)rightHandPoint.Position.Y);
+                Canvas.SetTop(item.getImage(), mainHandJoint.Position.Y);
+                item.setY((float)mainHandJoint.Position.Y);
             }
             item.setActualPosition(this.FindPosition(item));
         }

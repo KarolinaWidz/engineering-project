@@ -20,9 +20,22 @@ namespace EngineeringProjectApp
     /// </summary>
     public partial class Menu : UserControl
     {
+        string hand;
         public Menu()
         {
             InitializeComponent();
+        }
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.hand = HandComboBox.Text;
+            if (DificultyLevelComboBox.Text== "Łatwy" && ReturningCheckBox.IsChecked == true) {
+                MainWindow mainWindow = new MainWindow(int.Parse(AmountOfBirdsBox.Text), int.Parse(AmountOfButterfliesBox.Text),this.hand);
+                mainWindow.Show();
+                Application.Current.Windows[0].Close();
+            }
         }
     }
 }
