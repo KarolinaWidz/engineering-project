@@ -44,13 +44,17 @@ namespace EngineeringProjectApp
         private int amountOfBirds;
         private int amountOfButterflies;
         private string hand;
-        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand)
+        private bool returningFlag;
+        private int mistakeCounter;
+        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag)
         {
             InitializeComponent();
             Loaded += WindowLoaded;
             this.amountOfBirds = amountOfBirds;
             this.amountOfButterflies = amountOfButterflies;
             this.hand = hand;
+            this.returningFlag = returningFlag;
+            this.mistakeCounter = 0;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -158,16 +162,29 @@ namespace EngineeringProjectApp
         }
 
         private void CheckPosition(Item item) {
-            if ((item.getActualPosition()!= Position.OTHER) && (item.getActualPosition() != item.getTargetPosition()))
-            {
-                Console.Beep();
-                Canvas.SetLeft(item.getImage(), item.getStartX());
-                Canvas.SetTop(item.getImage(), item.getStartY());
-                item.setActualPosition(Position.OTHER);
-                item.setX(item.getStartX());
-                item.setY(item.getStartY());
+            if (returningFlag) {
+                if ((item.getActualPosition() != Position.OTHER) && (item.getActualPosition() != item.getTargetPosition()))
+                {
+                    Console.Beep();
+                    Canvas.SetLeft(item.getImage(), item.getStartX());
+                    Canvas.SetTop(item.getImage(), item.getStartY());
+                    item.setActualPosition(Position.OTHER);
+                    item.setX(item.getStartX());
+                    item.setY(item.getStartY());
 
+                }
             }
+            else
+            {
+                if ((item.getActualPosition() != Position.OTHER) && (item.getActualPosition() != item.getTargetPosition() 
+                    && (item.getPreviousPosition() != item.getActualPosition())))
+                {
+                    Console.Beep();
+                    mistakeCounter++;
+                }
+                item.setPreviousPosition(item.getActualPosition());
+            }
+           
             if(item.getActualPosition() == item.getTargetPosition())
             {
                 item.setCorrectPosition();
@@ -193,7 +210,7 @@ namespace EngineeringProjectApp
             Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
             Label label = new Label
             {
-                Content = "Ukończono poziom: łatwy",
+                Content = "Ukończono poziom: łatwy, liczba pomyłek: " + this.mistakeCounter.ToString(),
                 FontSize = 30
                 
             };
@@ -201,7 +218,7 @@ namespace EngineeringProjectApp
             mainCanva.Children.Add(image);
             mainCanva.Children.Add(label);
             Canvas.SetTop(label, height/5*3);
-            Canvas.SetLeft(label, width/3);
+            Canvas.SetLeft(label, width/5);
             Canvas.SetLeft(image, 0);
             Canvas.SetTop(image, 0);
             SoundPlayer soundPlayerAction = new SoundPlayer(Properties.Resources.fanfareSound);

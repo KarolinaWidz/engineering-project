@@ -21,9 +21,16 @@ namespace EngineeringProjectApp
     public partial class Menu : UserControl
     {
         string hand;
+        bool returningFlag;
+        int amountOfBirds;
+        int amountOfButterflies;
         public Menu()
         {
             InitializeComponent();
+            this.hand = "";
+            this.returningFlag = true;
+            this.amountOfBirds = 0;
+            this.amountOfButterflies = 0;
         }
 
 
@@ -31,11 +38,24 @@ namespace EngineeringProjectApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.hand = HandComboBox.Text;
-            if (DificultyLevelComboBox.Text== "Łatwy" && ReturningCheckBox.IsChecked == true) {
-                MainWindow mainWindow = new MainWindow(int.Parse(AmountOfBirdsBox.Text), int.Parse(AmountOfButterfliesBox.Text),this.hand);
+            this.returningFlag = ReturningCheckBox.IsChecked == true;
+            this.amountOfBirds = int.Parse(AmountOfBirdsBox.Text);
+            this.amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
+          
+            if (DificultyLevelComboBox.Text == "Łatwy" && validArgument(amountOfBirds, amountOfButterflies)){
+                MainWindow mainWindow = new MainWindow(this.amountOfBirds, this.amountOfButterflies, this.hand, this.returningFlag);
                 mainWindow.Show();
                 Application.Current.Windows[0].Close();
             }
+            
+        }
+
+        private bool validArgument(int amountOfBirds, int amountOfButterflies) {
+            if (amountOfButterflies + amountOfBirds == 0) {
+                MessageBox.Show("Sumaryczna liczba zwierzątek musi być różna od zera", "Błąd!");
+                return false;
+            }
+            return true;
         }
     }
 }
