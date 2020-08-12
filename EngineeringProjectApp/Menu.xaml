@@ -18,8 +18,8 @@
         <Label Content="Poziom trudności:" HorizontalAlignment="Left" Margin="43,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.51,0.846" Width="104"/>
         <Label Content="Ilość motylków:" HorizontalAlignment="Left" Margin="56,119,0,0" VerticalAlignment="Top"/>
         <CheckBox Name="ReturningCheckBox" Content="Powrót zwierzątek" HorizontalAlignment="Left" Margin="295,56,0,0" VerticalAlignment="Top" Height="22"/>
-        <Slider  Name="AmountOfBirdsSlider" HorizontalAlignment="Left" Margin="154,93,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="20" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
-        <Slider  Name="AmountOfButterfliesSlider" HorizontalAlignment="Left" Margin="154,127,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="20" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        <Slider  Name="AmountOfBirdsSlider" HorizontalAlignment="Left" Margin="154,93,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="10" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        <Slider  Name="AmountOfButterfliesSlider" HorizontalAlignment="Left" Margin="154,127,0,0" VerticalAlignment="Top" Width="120" Value="5" Minimum="0" Maximum="10" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
         <TextBox Name ="AmountOfButterfliesBox" Text="{Binding ElementName=AmountOfButterfliesSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"  IsReadOnly="True"/>
         <TextBox Name ="AmountOfBirdsBox" Text="{Binding ElementName=AmountOfBirdsSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
         <Label Content="Wybór ręki:" HorizontalAlignment="Left" Margin="77,160,0,0" VerticalAlignment="Top"/>
@@ -27,5 +27,9 @@
             <ComboBoxItem Content="Prawa" IsSelected="True"/>
             <ComboBoxItem Content="Lewa"/>
         </ComboBox>
+        <Slider  Name="VelocitySlider" HorizontalAlignment="Left" Margin="154,202,0,0" VerticalAlignment="Top" Width="120" Value="2" Minimum="2" Maximum="6" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        <Label Content="Wybór prędkości: " HorizontalAlignment="Left" Margin="41,200,0,0" VerticalAlignment="Top"/>
+        <TextBox Name ="VelocityBox" Text="{Binding ElementName=VelocitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
     </Grid>
+    
 </UserControl>

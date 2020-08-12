@@ -27,6 +27,7 @@ using Point = System.Windows.Point;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 using System.Media;
+using System.Diagnostics;
 
 
 namespace EngineeringProjectApp
@@ -46,7 +47,16 @@ namespace EngineeringProjectApp
         private string hand;
         private bool returningFlag;
         private int mistakeCounter;
-        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag)
+        private string difficultyLevel;
+        private int velocity;
+        private Stopwatch watch;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            Loaded += WindowLoaded;
+        }
+        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag, string difficultyLevel, int velocity)
         {
             InitializeComponent();
             Loaded += WindowLoaded;
@@ -55,6 +65,8 @@ namespace EngineeringProjectApp
             this.hand = hand;
             this.returningFlag = returningFlag;
             this.mistakeCounter = 0;
+            this.difficultyLevel = difficultyLevel;
+            this.velocity = velocity;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -67,37 +79,38 @@ namespace EngineeringProjectApp
                 smoothParameters.JitterRadius = 1.0f;
                 smoothParameters.MaxDeviationRadius = 0.5f;
             }
-            this.drawingGroup = new DrawingGroup();
-            this.imageSource = new DrawingImage(this.drawingGroup);
-            Image.Source = this.imageSource;
+            drawingGroup = new DrawingGroup();
+            imageSource = new DrawingImage(drawingGroup);
+            Image.Source = imageSource;
 
             foreach (var potentialSensor in KinectSensor.KinectSensors)
             {
                 if (potentialSensor.Status == KinectStatus.Connected)
                 {
-                    this.sensor = potentialSensor;
+                    sensor = potentialSensor;
                     break;
                 }
             }
 
-            if (null != this.sensor)
+            if (null != sensor)
             {
-                this.sensor.SkeletonStream.Enable(smoothParameters);
-                this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+                sensor.SkeletonStream.Enable(smoothParameters);
+                sensor.SkeletonFrameReady += SensorSkeletonFrameReady;
 
                 try
                 {
-                    this.sensor.Start();
+                    sensor.Start();
                     AddManyItems();
+                    watch = Stopwatch.StartNew();
                 }
                 catch (IOException)
                 {
-                    this.sensor = null;
+                    sensor = null;
                 }
             }
         }
 
-        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        protected void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             Skeleton[] skeletons = new Skeleton[0];
 
@@ -110,7 +123,7 @@ namespace EngineeringProjectApp
                 }
             }
 
-            using (DrawingContext dc = this.drawingGroup.Open())
+            using (DrawingContext dc = drawingGroup.Open())
             {
                 //Assembly myAssembly = Assembly.GetExecutingAssembly();
                 //Stream myStream = myAssembly.GetManifestResourceStream("EngineeringProjectApp.images.background.bmp");
@@ -138,7 +151,7 @@ namespace EngineeringProjectApp
                         {
                             Joint mainHand;
                             Joint otherHand;
-                            if (this.hand == "Prawa")
+                            if (hand == "Prawa")
                             {
                                 mainHand = skel.Joints[JointType.HandRight];
                                 otherHand = skel.Joints[JointType.HandLeft];
@@ -148,17 +161,52 @@ namespace EngineeringProjectApp
                                 otherHand = skel.Joints[JointType.HandRight];
                             }
                             CheckBoundaries(mainHand, dc);
+                            if (difficultyLevel == "Średni") {
+                                ManyItemsFly(2);
+                            }
+                            if (difficultyLevel == "Trudny") {
+                                ManyItemsFly(velocity);
+                            }
+
+
                             if (mainHand.TrackingState == JointTrackingState.Tracked || mainHand.TrackingState == JointTrackingState.Inferred)
                             {
-                                this.DrawTrasmorfedPoint(mainHand);
-                                this.ScanItems(mainHand, skel.Joints[JointType.Head], otherHand);
+                                DrawTrasmorfedPoint(mainHand);
+                                ScanItems(mainHand, skel.Joints[JointType.Head], otherHand);
                                 
                             }
                         }
                     }
                 }
-                this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
+                drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
+
             }
+        }
+
+        private void StartFlying(Item item,int shiftLeft, int shiftTop) {
+            if ((item.getX() + shiftLeft) <= 680 && (item.getX() + shiftLeft) >= 210
+                && (item.getY() + shiftTop) <= 600 && (item.getY() + shiftTop) >= 40) {
+                Canvas.SetLeft(item.getImage(), item.getX() + shiftLeft);
+                Canvas.SetTop(item.getImage(), item.getY() + shiftTop);
+                item.setX(item.getX() + shiftLeft);
+                item.setY(item.getY() + shiftTop);
+            }
+            
+        }
+
+        private void ManyItemsFly(int velocity) {
+            Random r = new Random();
+            for (int i = 0; i < itemsArray.Length; i++) {
+                switch (r.Next(0,4))
+                {
+                    case 0: StartFlying(itemsArray[i], velocity, 0); break;
+                    case 1: StartFlying(itemsArray[i], -velocity, 0); break;
+                    case 2: StartFlying(itemsArray[i], 0, velocity); break;
+                    case 3: StartFlying(itemsArray[i], 0, -velocity); break;
+                }
+            }
+           
+
         }
 
         private void CheckPosition(Item item) {
@@ -200,25 +248,37 @@ namespace EngineeringProjectApp
                 }
             }
             if (resultCondition == true) {
+                watch.Stop();
                 ShowFinalScene();
             }
             return resultCondition;
         }
 
         private void ShowFinalScene() {
+            var elapsedMs = watch.ElapsedMilliseconds/1000;
             BitmapImage bitmapImage = new BitmapImage(new Uri("balloonsImage.png", UriKind.Relative));
             Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
             Label label = new Label
             {
-                Content = "Ukończono poziom: łatwy, liczba pomyłek: " + this.mistakeCounter.ToString(),
+                Content = "Ukończono poziom: "+difficultyLevel.ToString() +", liczba pomyłek: " + mistakeCounter.ToString()+",",
                 FontSize = 30
                 
             };
-            
+
+            Label label2 = new Label
+            {
+                Content = "czas gry: " + elapsedMs.ToString()+" s",
+                FontSize = 30
+
+            };
+
             mainCanva.Children.Add(image);
             mainCanva.Children.Add(label);
+            mainCanva.Children.Add(label2);
             Canvas.SetTop(label, height/5*3);
             Canvas.SetLeft(label, width/5);
+            Canvas.SetTop(label2, height / 5 * 3+35);
+            Canvas.SetLeft(label2, width / 5);
             Canvas.SetLeft(image, 0);
             Canvas.SetTop(image, 0);
             SoundPlayer soundPlayerAction = new SoundPlayer(Properties.Resources.fanfareSound);
@@ -240,21 +300,21 @@ namespace EngineeringProjectApp
 
             }
             else resultPosition = Position.OTHER;
-            this.CheckPosition(item);
+            CheckPosition(item);
             return resultPosition;
         }
 
 
         private void AddManyItems() {
-            this.itemsArray = new Item[amountOfButterflies + amountOfBirds];
+            itemsArray = new Item[amountOfButterflies + amountOfBirds];
             Random r = new Random();
             int randomWidth, randomHeight;
-            for (int i = 0; i < this.amountOfBirds; i++) {
+            for (int i = 0; i < amountOfBirds; i++) {
                 randomWidth = r.Next(210, 680);
                 randomHeight = r.Next(40, 600);
                 itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BIRD, Position.TREE));
             }
-            for (int i = this.amountOfBirds; i < itemsArray.Length; i++) {
+            for (int i = amountOfBirds; i < itemsArray.Length; i++) {
                 randomWidth = r.Next(210, 680);
                 randomHeight = r.Next(40, 600);
                 itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BUTTERFLY, Position.SUNFLOWER));
@@ -271,12 +331,12 @@ namespace EngineeringProjectApp
 
             if (otherHandPoint.Position.Y < HeadPoint.Position.Y)
             {
-                for (int i = 0; i < this.itemsArray.Length; i++)
+                for (int i = 0; i < itemsArray.Length; i++)
                 {
-                    if (mainHandPoint.Position.X <= (this.itemsArray[i].getX() + shift) && mainHandPoint.Position.X >= (this.itemsArray[i].getX() - shift)
-                        && mainHandPoint.Position.Y <= (this.itemsArray[i].getY() + shift) && mainHandPoint.Position.Y >= (this.itemsArray[i].getY() - shift))
+                    if (mainHandPoint.Position.X <= (itemsArray[i].getX() + shift) && mainHandPoint.Position.X >= (itemsArray[i].getX() - shift)
+                        && mainHandPoint.Position.Y <= (itemsArray[i].getY() + shift) && mainHandPoint.Position.Y >= (itemsArray[i].getY() - shift))
                     {
-                        MoveItem(mainHandPoint, this.itemsArray[i]);
+                        MoveItem(mainHandPoint, itemsArray[i]);
                         break;
                     }
                 }
@@ -300,7 +360,7 @@ namespace EngineeringProjectApp
                 Canvas.SetTop(item.getImage(), mainHandJoint.Position.Y);
                 item.setY((float)mainHandJoint.Position.Y);
             }
-            item.setActualPosition(this.FindPosition(item));
+            item.setActualPosition(FindPosition(item));
         }
 
         private Item AddItem(int x, int y, Item item) {
@@ -341,9 +401,9 @@ namespace EngineeringProjectApp
         
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (null != this.sensor)
+            if (null != sensor)
             {
-                this.sensor.Stop();
+                sensor.Stop();
             }
         }
        

@@ -24,6 +24,8 @@ namespace EngineeringProjectApp
         bool returningFlag;
         int amountOfBirds;
         int amountOfButterflies;
+        string difficultyLevel;
+        int velocity;
         public Menu()
         {
             InitializeComponent();
@@ -31,6 +33,8 @@ namespace EngineeringProjectApp
             this.returningFlag = true;
             this.amountOfBirds = 0;
             this.amountOfButterflies = 0;
+            this.difficultyLevel = "";
+            this.velocity = 0;
         }
 
 
@@ -41,16 +45,19 @@ namespace EngineeringProjectApp
             this.returningFlag = ReturningCheckBox.IsChecked == true;
             this.amountOfBirds = int.Parse(AmountOfBirdsBox.Text);
             this.amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
-          
-            if (DificultyLevelComboBox.Text == "Łatwy" && validArgument(amountOfBirds, amountOfButterflies)){
-                MainWindow mainWindow = new MainWindow(this.amountOfBirds, this.amountOfButterflies, this.hand, this.returningFlag);
+            this.difficultyLevel = DificultyLevelComboBox.Text;
+            this.velocity = int.Parse(VelocityBox.Text);
+
+
+            if (ValidArgument(amountOfBirds, amountOfButterflies)){
+                MainWindow mainWindow = new MainWindow(this.amountOfBirds, this.amountOfButterflies, this.hand, this.returningFlag, this.difficultyLevel, this.velocity);
                 mainWindow.Show();
                 Application.Current.Windows[0].Close();
             }
             
         }
 
-        private bool validArgument(int amountOfBirds, int amountOfButterflies) {
+        private bool ValidArgument(int amountOfBirds, int amountOfButterflies) {
             if (amountOfButterflies + amountOfBirds == 0) {
                 MessageBox.Show("Sumaryczna liczba zwierzątek musi być różna od zera", "Błąd!");
                 return false;
