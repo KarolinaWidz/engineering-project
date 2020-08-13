@@ -75,7 +75,6 @@
     </ApplicationDefinition>
     <Compile Include="Item.cs" />
     <Compile Include="ItemType.cs" />
-    <Compile Include="MediumLevel.cs" />
     <Compile Include="Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>

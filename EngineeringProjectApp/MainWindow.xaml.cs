@@ -271,19 +271,38 @@ namespace EngineeringProjectApp
                 FontSize = 30
 
             };
+            Button button = new Button
+            {
+                Content = "Powrót do menu",
+                FontSize = 30
+            };
+            button.Click += btnClick;
 
+            
             mainCanva.Children.Add(image);
             mainCanva.Children.Add(label);
             mainCanva.Children.Add(label2);
+            mainCanva.Children.Add(button);
             Canvas.SetTop(label, height/5*3);
             Canvas.SetLeft(label, width/5);
             Canvas.SetTop(label2, height / 5 * 3+35);
             Canvas.SetLeft(label2, width / 5);
+            Canvas.SetLeft(button, width / 3);
+            Canvas.SetTop(button, height / 5 * 4);
             Canvas.SetLeft(image, 0);
             Canvas.SetTop(image, 0);
             SoundPlayer soundPlayerAction = new SoundPlayer(Properties.Resources.fanfareSound);
             soundPlayerAction.PlaySync();
         }
+
+        private void btnClick(object sender, RoutedEventArgs e)
+        {
+            this.itemsArray = new Item[0];
+            this.mistakeCounter = 0;
+            this.Content = new Menu();
+            this.Show();
+        }
+
         private Position FindPosition(Item item) {
             Position previousPosition = item.getActualPosition();
             Position resultPosition;
