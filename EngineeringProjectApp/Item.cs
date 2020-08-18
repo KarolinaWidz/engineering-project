@@ -46,7 +46,7 @@ namespace EngineeringProjectApp
         public void setImage(Image image) { this.image = image; }
         public void setActualPosition(Position actualPosition) { this.actualPosition = actualPosition; }
         public void setPreviousPosition(Position previousPosition) { this.previousPosition = previousPosition; }
-        public void setCorrectPosition() { this.correctPosition = true; }
+        public void setCorrectPostionFlag(bool correctPositionFlag) { this.correctPosition = correctPositionFlag; }
 
     }
 }

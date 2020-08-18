@@ -30,6 +30,66 @@
         <Slider  Name="VelocitySlider" HorizontalAlignment="Left" Margin="154,202,0,0" VerticalAlignment="Top" Width="120" Value="2" Minimum="2" Maximum="6" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
         <Label Content="Wybór prędkości: " HorizontalAlignment="Left" Margin="41,200,0,0" VerticalAlignment="Top"/>
         <TextBox Name ="VelocityBox" Text="{Binding ElementName=VelocitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
+        <!--<ListView 
+            x:Name="lstItems" Margin="435,10,10,224">
+            <ListView.View>
+                <GridView AllowsColumnReorder="True">
+                    <GridViewColumn>
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate >
+                                <TextBlock Text="Id" Margin="2" />
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Margin="2"
+                                        Text="{Binding Path=UserId}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Imię" Margin="2" />
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Margin="2"
+                                        Text="{Binding Path=Name}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Nazwisko" Margin="2" />
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Margin="2"
+                                        Text="{Binding Path=LastName}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <WrapPanel Margin="435,231,10,187" RenderTransformOrigin="0.236,0.444">
+            <Button Content="Dodaj" x:Name="btnAdd" Margin="5"
+                Click="btnAdd_Click" />
+            <Button Content="Edytuj" x:Name="btnEdit" Margin="5"
+                Click="btnEdit_Click" />
+            <Button Content="Usuń" x:Name="btnDelete" Margin="5"
+                Click="btnDelete_Click" />
+        </WrapPanel>-->
     </Grid>
-    
+
 </UserControl>

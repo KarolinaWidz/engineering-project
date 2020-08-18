@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EngineeringProjectApp
 {
@@ -20,12 +10,15 @@ namespace EngineeringProjectApp
     /// </summary>
     public partial class Menu : UserControl
     {
-        string hand;
-        bool returningFlag;
-        int amountOfBirds;
-        int amountOfButterflies;
-        string difficultyLevel;
-        int velocity;
+
+        private string hand;
+        private bool returningFlag;
+        private int amountOfBirds;
+        private int amountOfButterflies;
+        private string difficultyLevel;
+        private int velocity;
+      //  private Database databaseObject;
+
         public Menu()
         {
             InitializeComponent();
@@ -35,8 +28,15 @@ namespace EngineeringProjectApp
             this.amountOfButterflies = 0;
             this.difficultyLevel = "";
             this.velocity = 0;
+            //DatabaseController();
         }
 
+
+        private void DatabaseController()
+        {
+           // databaseObject = new Database();
+
+        }
 
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,5 +64,9 @@ namespace EngineeringProjectApp
             }
             return true;
         }
+
+
+    
     }
+
 }

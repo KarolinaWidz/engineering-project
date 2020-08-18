@@ -1,33 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit;
-using Microsoft.Kinect.Toolkit.Controls;
-using Microsoft.Kinect.Toolkit.Interaction;
-using System.Globalization;
 using System.IO;
 using Coding4Fun.Kinect.Wpf;
-using System.Reflection;
-using System.Drawing;
-using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
-using Point = System.Windows.Point;
-using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 using System.Media;
 using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.Windows.Navigation;
 
 
 namespace EngineeringProjectApp
@@ -125,23 +110,9 @@ namespace EngineeringProjectApp
 
             using (DrawingContext dc = drawingGroup.Open())
             {
-                //Assembly myAssembly = Assembly.GetExecutingAssembly();
-                //Stream myStream = myAssembly.GetManifestResourceStream("EngineeringProjectApp.images.background.bmp");
-                // Bitmap bmp = new Bitmap(myStream);
-                //Bitmap myImage = (Bitmap)Properties.Resources.ResourceManager.GetObject("backround.png");
-                //Bitmap bmp = Properties.Resources.Background;
-                //dc.DrawImage(new BitmapImage(new Uri(Properties.Resources.Background));
-                //dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/AssemblyName;component/Resources/Background.png")), new Rect(0.0, 0.0,width,height));
-                //String uri = "pack://EngineeringProjectApp:,,,/AssemblyName;component/Resources/Background.png";
-                //System.Drawing.Image image = bmp;
-
-
-                //dc.DrawImage(new BitmapImage(new Uri("pack://siteoforigin:,,,/Resources/Background.png", UriKind.Relative)), new Rect(0.0, 0.0, width, height));
-                //Uri uri = new Uri(Properties.Resources.Background.ToString(), UriKind.Relative);
-                //ImageSource imgSource = new BitmapImage(uri);
-                //this.Image.Source = imgSource;
-                //dc.DrawImage(imgSource, new Rect(0.0, 0.0, width, height));
-                dc.DrawImage(new BitmapImage(new Uri("../../Resources/backgroundImage.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
+                dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/Resources/backgroundImage.png")), new Rect(0.0, 0.0, width, height));
+                //dc.DrawImage(new BitmapImage(new Uri("backgroundImage.png", UriKind.Relative)), new Rect(0.0, 0.0, width, height));
+                //dc.DrawImage(new BitmapImage(new Uri("../../Resources/backgroundImage.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
                 { 
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
@@ -232,12 +203,13 @@ namespace EngineeringProjectApp
                 }
                 item.setPreviousPosition(item.getActualPosition());
             }
-           
-            if(item.getActualPosition() == item.getTargetPosition())
+
+            if (item.getActualPosition() == item.getTargetPosition())
             {
-                item.setCorrectPosition();
+                item.setCorrectPostionFlag(true);
                 CheckFinallyCondition();
             }
+            else { item.setCorrectPostionFlag(false); }
         }
 
         private bool CheckFinallyCondition() {
@@ -256,7 +228,9 @@ namespace EngineeringProjectApp
 
         private void ShowFinalScene() {
             var elapsedMs = watch.ElapsedMilliseconds/1000;
-            BitmapImage bitmapImage = new BitmapImage(new Uri("balloonsImage.png", UriKind.Relative));
+
+            //BitmapImage bitmapImage = new BitmapImage(new Uri("balloonsImage.png", UriKind.Relative));
+            BitmapImage bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/balloonsImage.png"));
             Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
             Label label = new Label
             {
@@ -276,7 +250,7 @@ namespace EngineeringProjectApp
                 Content = "Powrót do menu",
                 FontSize = 30
             };
-            button.Click += btnClick;
+            button.Click += BtnClick;
 
             
             mainCanva.Children.Add(image);
@@ -295,7 +269,7 @@ namespace EngineeringProjectApp
             soundPlayerAction.PlaySync();
         }
 
-        private void btnClick(object sender, RoutedEventArgs e)
+        private void BtnClick(object sender, RoutedEventArgs e)
         {
             this.itemsArray = new Item[0];
             this.mistakeCounter = 0;
@@ -347,7 +321,6 @@ namespace EngineeringProjectApp
             Joint otherHandPoint = otherHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             Joint HeadPoint = head.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             int shift = 25;
-
             if (otherHandPoint.Position.Y < HeadPoint.Position.Y)
             {
                 for (int i = 0; i < itemsArray.Length; i++)
@@ -360,14 +333,13 @@ namespace EngineeringProjectApp
                     }
                 }
             }
-            else { OrangeDot.Fill = new SolidColorBrush(Colors.OrangeRed);
+            else {
+                OrangeDot.Fill = new SolidColorBrush(Colors.OrangeRed);
             }
-
         }
         private void MoveItem(Joint mainHandJoint, Item item)
         {
             int offset = 50;
-     
             OrangeDot.Fill = new SolidColorBrush(Colors.BlueViolet);
             if (mainHandJoint.Position.X <= width - offset)
             {
@@ -385,8 +357,10 @@ namespace EngineeringProjectApp
         private Item AddItem(int x, int y, Item item) {
             BitmapImage bitmapImage=null;
             switch (item.getItemType()) {
-                case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
-                case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative));  break;
+                //case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
+                //case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative)); break;
+                case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/butterflyImage.png")); break;
+                case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/birdImage.png"));  break;
             }
             item.setImage(new Image
             {
@@ -411,11 +385,10 @@ namespace EngineeringProjectApp
             {
                 Canvas.SetLeft(OrangeDot, scaledJoint.Position.X);
             }
-            if (scaledJoint.Position.Y <= height  && scaledJoint.Position.Y>=0)
+            if (scaledJoint.Position.Y <= height && scaledJoint.Position.Y >= 0)
             {
                 Canvas.SetTop(OrangeDot, scaledJoint.Position.Y);
             }
-
         }
         
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -435,38 +408,29 @@ namespace EngineeringProjectApp
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, height - 10.0f, width, 10.0f));
-                
+                    new Rect(0, height - 10.0f, width, 10.0f));   
             }
-
             if (scaledJoint.Position.Y <= offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, width, 10.0f));
-                
+                    new Rect(0, 0, width, 10.0f));   
             }
-
             if (scaledJoint.Position.X <= offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, 10.0f, height));
-                
+                    new Rect(0, 0, 10.0f, height));   
             }
-
             if (scaledJoint.Position.X >= width- offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(width - 10.0f, 0, 10.0f, width));
-                
+                    new Rect(width - 10.0f, 0, 10.0f, width));           
             }
         }
     }
-
-
 }
