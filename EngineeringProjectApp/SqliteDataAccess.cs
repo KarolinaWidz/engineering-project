@@ -39,8 +39,32 @@ namespace EngineeringProjectApp
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = @"DELETE FROM User WHERE id=@id";
+                string query = "DELETE FROM User WHERE id=@id";
                 cnn.Execute(query, new { id });
+            }
+        }
+
+        public static List<GameModel> LoadAllGames()
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<GameModel>("select * from Game", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+
+        public static void SaveGame(GameModel game)
+        {
+
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+
+                string query = "insert into Game (UserId, Date, Level, Returning, AmountOfButterflies, AmountOfBirds, Time) " +
+                    "values (@UserId, @Date, @Level, @Returning, @AmountOfButterflies, @AmountOfBirds, @Time)";
+                cnn.Execute(query, new {
+                    game.UserId, game.Date, game.Level, game.Returning, game.AmountOfButterflies, game.AmountOfBirds, game.Time
+
+                });
             }
         }
 

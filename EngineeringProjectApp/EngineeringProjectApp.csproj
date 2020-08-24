@@ -124,6 +124,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GameModel.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemType.cs" />
     <Compile Include="Menu.xaml.cs">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
@@ -19,6 +20,7 @@ namespace EngineeringProjectApp
         private string difficultyLevel;
         private int velocity;
         private List<UserModel> users = new List<UserModel>();
+        private List<GameModel> games = new List<GameModel>();
 
         public Menu()
         {
@@ -31,7 +33,22 @@ namespace EngineeringProjectApp
             velocity = 0;
             users = SqliteDataAccess.LoadAllUsers();
             UserList.ItemsSource = users;
-            
+
+            GameModel g = new GameModel
+            {
+                UserId = 2,
+                Date = DateTime.Today.ToString(),
+                Level = "Łatwy",
+                Returning = 1,
+                AmountOfButterflies = 10,
+                AmountOfBirds = 5,
+                Time="20 s"
+    };
+            SqliteDataAccess.SaveGame(g);
+            games = SqliteDataAccess.LoadAllGames();
+            foreach (GameModel game in games)
+                Console.WriteLine(game.ToString());
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
