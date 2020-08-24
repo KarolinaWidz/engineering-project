@@ -1,18 +1,15 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EngineeringProjectApp
 {
     public class SqliteDataAccess
     {
-        public static List<UserModel> LoadUsers(){
+        public static List<UserModel> LoadAllUsers(){
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
                 var output = cnn.Query<UserModel>("select * from User", new DynamicParameters());
@@ -25,6 +22,25 @@ namespace EngineeringProjectApp
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
                 cnn.Execute("insert into User (FirstName, LastName) values (@FirstName, @LastName)",user);
+            }
+        }
+
+        public static void EditUser(UserModel user, int id)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string query = "update User set FirstName = @FirstName, LastName =  @LastName where id= @id";
+                cnn.Execute(query,new { user.FirstName,user.LastName, id});
+            }
+        }
+
+
+        public static void DeleteUser(int id)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string query = @"DELETE FROM User WHERE id=@id";
+                cnn.Execute(query, new { id });
             }
         }
 

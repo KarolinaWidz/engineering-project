@@ -172,7 +172,7 @@
     <None Include="EngineeringProjectApp_1_TemporaryKey.pfx" />
     <None Include="EngineeringProjectApp_TemporaryKey.pfx" />
     <Content Include="gameDb.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

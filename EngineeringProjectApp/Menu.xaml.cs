@@ -12,7 +12,6 @@ namespace EngineeringProjectApp
     /// </summary>
     public partial class Menu : UserControl
     {
-
         private string hand;
         private bool returningFlag;
         private int amountOfBirds;
@@ -24,42 +23,27 @@ namespace EngineeringProjectApp
         public Menu()
         {
             InitializeComponent();
-            this.hand = "";
-            this.returningFlag = true;
-            this.amountOfBirds = 0;
-            this.amountOfButterflies = 0;
-            this.difficultyLevel = "";
-            this.velocity = 0;
-            UserModel u = new UserModel
-            {
-                FirstName = "Kuba",
-                LastName = "Nowak"
-            };
-            SqliteDataAccess.SaveUser(u);
-            users = SqliteDataAccess.LoadUsers();
-            StringBuilder builder = new StringBuilder();
-            foreach (UserModel us in users)
-            {
-                // Append string to StringBuilder.
-                builder.Append(us.ToString()).Append("|");
-            }
-            // Get string from StringBuilder.
-            string result = builder.ToString();
-            System.Console.WriteLine("TUTAJ: "+result);
+            hand = "";
+            returningFlag = true;
+            amountOfBirds = 0;
+            amountOfButterflies = 0;
+            difficultyLevel = "";
+            velocity = 0;
+            users = SqliteDataAccess.LoadAllUsers();
+            UserList.ItemsSource = users;
             
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.hand = HandComboBox.Text;
-            this.returningFlag = ReturningCheckBox.IsChecked == true;
-            this.amountOfBirds = int.Parse(AmountOfBirdsBox.Text);
-            this.amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
-            this.difficultyLevel = DificultyLevelComboBox.Text;
-            this.velocity = int.Parse(VelocityBox.Text);
-
-            if (ValidArgument(amountOfBirds, amountOfButterflies)){
-                MainWindow mainWindow = new MainWindow(this.amountOfBirds, this.amountOfButterflies, this.hand, this.returningFlag, this.difficultyLevel, this.velocity);
+            hand = HandComboBox.Text;
+            returningFlag = ReturningCheckBox.IsChecked == true;
+            amountOfBirds = int.Parse(AmountOfBirdsBox.Text);
+            amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
+            difficultyLevel = DificultyLevelComboBox.Text;
+            velocity = int.Parse(VelocityBox.Text);
+            if (ValidArgument(amountOfBirds, amountOfButterflies) && ValidUser(UserList.SelectedItems.Count)){
+                MainWindow mainWindow = new MainWindow(amountOfBirds, amountOfButterflies, hand, returningFlag, difficultyLevel, velocity, (UserModel)UserList.SelectedItems[0]);
                 mainWindow.Show();
                 Application.Current.Windows[0].Close();
             }            
@@ -69,12 +53,76 @@ namespace EngineeringProjectApp
         {
             if (amountOfButterflies + amountOfBirds == 0)
             {
-                MessageBox.Show("Sumaryczna liczba zwierzątek musi być różna od zera", "Błąd!");
+                MessageBox.Show("Sumaryczna liczba zwierzątek musi być większa od zera", "Błąd!");
                 return false;
             }
             return true;
         }
-    
+
+        private bool ValidUser(int amount)
+        {
+            if (amount ==0)
+            {
+                MessageBox.Show("Nie wybrano użytkownika", "Błąd!");
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckNames(string firstName, string lastName)
+        {
+            if (firstName.Length == 0 || lastName.Length==0)
+            {
+                MessageBox.Show("Podano błędną nazwę użytkownika", "Błąd!");
+                return false;
+            }
+            return true;
+        }
+
+
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckNames(FirstNameTextBox.Text, LastNameTextBox.Text))
+            {
+                UserModel u = new UserModel
+                {
+                    FirstName = FirstNameTextBox.Text,
+                    LastName = LastNameTextBox.Text
+                };
+                SqliteDataAccess.SaveUser(u);
+                users = SqliteDataAccess.LoadAllUsers();
+                UserList.ItemsSource = users;
+            }
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckNames(FirstNameTextBox.Text, LastNameTextBox.Text) && ValidUser((UserList.SelectedItems.Count)))
+            {
+                UserModel prevUser = (UserModel)UserList.SelectedItems[0];
+                UserModel u = new UserModel
+                {
+                    FirstName = FirstNameTextBox.Text,
+                    LastName = LastNameTextBox.Text
+                };
+                
+                SqliteDataAccess.EditUser(u,prevUser.Id);
+                users = SqliteDataAccess.LoadAllUsers();
+                UserList.ItemsSource = users;
+            }
+        }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValidUser((UserList.SelectedItems.Count)))
+            {
+                UserModel user = (UserModel)UserList.SelectedItems[0];
+                SqliteDataAccess.DeleteUser(user.Id);
+                users = SqliteDataAccess.LoadAllUsers();
+                UserList.ItemsSource = users;
+            }
+        }
     }
 
 }

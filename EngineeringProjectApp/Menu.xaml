@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EngineeringProjectApp"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="White">
-    <Grid>
+             d:DesignHeight="450"
+             Background="White" Width="772">
+    <Grid Margin="0,0,38,0">
         <Button Content="Rozpocznij grę" HorizontalAlignment="Left" Margin="370,399,0,0" VerticalAlignment="Top" Width="92" Click="Button_Click"/>
         <ComboBox Name="DificultyLevelComboBox" HorizontalAlignment="Left" Margin="154,54,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem Content="Łatwy" IsSelected="True"/>
@@ -30,21 +30,22 @@
         <Slider  Name="VelocitySlider" HorizontalAlignment="Left" Margin="154,202,0,0" VerticalAlignment="Top" Width="120" Value="2" Minimum="2" Maximum="6" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
         <Label Content="Wybór prędkości: " HorizontalAlignment="Left" Margin="41,200,0,0" VerticalAlignment="Top"/>
         <TextBox Name ="VelocityBox" Text="{Binding ElementName=VelocitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
-        <!--<ListView 
-            x:Name="lstItems" Margin="435,10,10,224">
+        <Label Content="Wybór użytkownika: " HorizontalAlignment="Left" Margin="476,50,0,0" VerticalAlignment="Top"/>
+        <ListView 
+            x:Name="UserList" Margin="476,85,0,177">
             <ListView.View>
                 <GridView AllowsColumnReorder="True">
                     <GridViewColumn>
                         <GridViewColumn.HeaderTemplate>
-                            <DataTemplate >
-                                <TextBlock Text="Id" Margin="2" />
+                            <DataTemplate>
+                                <TextBlock Text="Id Użytkownika" Margin="2" />
                             </DataTemplate>
                         </GridViewColumn.HeaderTemplate>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock Margin="2"
-                                        Text="{Binding Path=UserId}" />
+                                        Text="{Binding Path=Id}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -59,7 +60,7 @@
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock Margin="2"
-                                        Text="{Binding Path=Name}" />
+                                        Text="{Binding Path=FirstName}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -82,14 +83,18 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <WrapPanel Margin="435,231,10,187" RenderTransformOrigin="0.236,0.444">
+        <Label Content="Imię:" HorizontalAlignment="Left" Margin="504,292,0,0" VerticalAlignment="Top"/>
+        <Label Content="Nazwisko:" HorizontalAlignment="Left" Margin="476,318,0,0" VerticalAlignment="Top"/>
+        <WrapPanel Margin="476,356,-41,45" RenderTransformOrigin="0.236,0.444">
             <Button Content="Dodaj" x:Name="btnAdd" Margin="5"
-                Click="btnAdd_Click" />
+                Click="BtnAdd_Click" />
             <Button Content="Edytuj" x:Name="btnEdit" Margin="5"
-                Click="btnEdit_Click" />
+                Click="BtnEdit_Click" />
             <Button Content="Usuń" x:Name="btnDelete" Margin="5"
-                Click="btnDelete_Click" />
-        </WrapPanel>-->
+                Click="BtnDelete_Click" />
+        </WrapPanel>
+        <TextBox Name="FirstNameTextBox" HorizontalAlignment="Left" Height="23" Margin="544,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+        <TextBox Name="LastNameTextBox" HorizontalAlignment="Left" Height="23" Margin="544,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
     </Grid>
 
 </UserControl>

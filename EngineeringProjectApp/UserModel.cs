@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EngineeringProjectApp
+﻿namespace EngineeringProjectApp
 {
     public class UserModel
     {
@@ -14,13 +8,13 @@ namespace EngineeringProjectApp
 
         public string FullName {
             get {
-                return $"{FirstName}{LastName}";
+                return $"{FirstName} {LastName}";
             }
         }
 
         public override string ToString()
         {
-            return FirstName+" "+LastName;
+            return Id+" "+FirstName+" "+LastName;
         }
     }
 }

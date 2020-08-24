@@ -33,6 +33,7 @@ namespace EngineeringProjectApp
         private int mistakeCounter;
         private string difficultyLevel;
         private int velocity;
+        private UserModel activeUser;
         private Stopwatch watch;
 
         public MainWindow()
@@ -40,7 +41,7 @@ namespace EngineeringProjectApp
             InitializeComponent();
             Loaded += WindowLoaded;
         }
-        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag, string difficultyLevel, int velocity)
+        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag, string difficultyLevel, int velocity, UserModel activeUser)
         {
             InitializeComponent();
             Loaded += WindowLoaded;
@@ -51,6 +52,7 @@ namespace EngineeringProjectApp
             this.mistakeCounter = 0;
             this.difficultyLevel = difficultyLevel;
             this.velocity = velocity;
+            this.activeUser = activeUser;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -226,16 +228,19 @@ namespace EngineeringProjectApp
             
             BitmapImage bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/balloonsImage.png"));
             Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
+            string message;
+            if (activeUser.FirstName.ToString()[activeUser.FirstName.ToString().Length-1] != 'a' || activeUser.FirstName.ToString()=="Kuba") message = " Ukończyłeś poziom: ";
+            else message = " Ukończyłaś poziom: ";
             Label label = new Label
             {
-                Content = "Ukończono poziom: "+difficultyLevel.ToString() +", liczba pomyłek: " + mistakeCounter.ToString()+",",
+                Content = activeUser.FirstName.ToString()+"!"+message+difficultyLevel.ToString(),
                 FontSize = 30
                 
             };
 
             Label label2 = new Label
             {
-                Content = "czas gry: " + elapsedMs.ToString()+" s",
+                Content = "Czas gry: " + elapsedMs.ToString()+" s, liczba pomyłek: " + mistakeCounter.ToString() + ",",
                 FontSize = 30
 
             };
@@ -252,9 +257,9 @@ namespace EngineeringProjectApp
             mainCanva.Children.Add(label2);
             mainCanva.Children.Add(button);
             Canvas.SetTop(label, height/5*3);
-            Canvas.SetLeft(label, width/5);
+            Canvas.SetLeft(label, width/4);
             Canvas.SetTop(label2, height / 5 * 3+35);
-            Canvas.SetLeft(label2, width / 5);
+            Canvas.SetLeft(label2, width / 4);
             Canvas.SetLeft(button, width / 3);
             Canvas.SetTop(button, height / 5 * 4);
             Canvas.SetLeft(image, 0);
