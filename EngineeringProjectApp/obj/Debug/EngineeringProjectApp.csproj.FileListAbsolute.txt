@@ -118,14 +118,11 @@ G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\D
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Xml.XmlSerializer.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Xml.XPath.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Xml.XPath.XDocument.dll
-G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Data.Sqlite.dll
-G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\SQLitePCLRaw.core.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Buffers.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Data.SQLite.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Memory.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Numerics.Vectors.dll
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
-G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Microsoft.Data.Sqlite.xml
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Buffers.xml
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Data.SQLite.xml
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\System.Data.SQLite.dll.config
@@ -138,3 +135,7 @@ G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\D
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp.exe.manifest
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp.application
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp.csprojAssemblyReference.cache
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Dapper.dll
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Dapper.xml
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\gameDb.db
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp_Content.g.cs

@@ -11,8 +11,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using System.Media;
 using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Windows.Navigation;
+
 
 
 namespace EngineeringProjectApp
@@ -111,8 +110,6 @@ namespace EngineeringProjectApp
             using (DrawingContext dc = drawingGroup.Open())
             {
                 dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/Resources/backgroundImage.png")), new Rect(0.0, 0.0, width, height));
-                //dc.DrawImage(new BitmapImage(new Uri("backgroundImage.png", UriKind.Relative)), new Rect(0.0, 0.0, width, height));
-                //dc.DrawImage(new BitmapImage(new Uri("../../Resources/backgroundImage.png", UriKind.Relative)),new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
                 { 
                     Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
@@ -155,12 +152,12 @@ namespace EngineeringProjectApp
         }
 
         private void StartFlying(Item item,int shiftLeft, int shiftTop) {
-            if ((item.getX() + shiftLeft) <= 680 && (item.getX() + shiftLeft) >= 210
-                && (item.getY() + shiftTop) <= 600 && (item.getY() + shiftTop) >= 40) {
-                Canvas.SetLeft(item.getImage(), item.getX() + shiftLeft);
-                Canvas.SetTop(item.getImage(), item.getY() + shiftTop);
-                item.setX(item.getX() + shiftLeft);
-                item.setY(item.getY() + shiftTop);
+            if ((item.GetX() + shiftLeft) <= 680 && (item.GetX() + shiftLeft) >= 210
+                && (item.GetY() + shiftTop) <= 600 && (item.GetY() + shiftTop) >= 40) {
+                Canvas.SetLeft(item.GetImage(), item.GetX() + shiftLeft);
+                Canvas.SetTop(item.GetImage(), item.GetY() + shiftTop);
+                item.SetX(item.GetX() + shiftLeft);
+                item.SetY(item.GetY() + shiftTop);
             }
             
         }
@@ -176,46 +173,44 @@ namespace EngineeringProjectApp
                     case 3: StartFlying(itemsArray[i], 0, -velocity); break;
                 }
             }
-           
-
         }
 
         private void CheckPosition(Item item) {
             if (returningFlag) {
-                if ((item.getActualPosition() != Position.OTHER) && (item.getActualPosition() != item.getTargetPosition()))
+                if ((item.GetActualPosition() != Position.OTHER) && (item.GetActualPosition() != item.GetTargetPosition()))
                 {
                     Console.Beep();
-                    Canvas.SetLeft(item.getImage(), item.getStartX());
-                    Canvas.SetTop(item.getImage(), item.getStartY());
-                    item.setActualPosition(Position.OTHER);
-                    item.setX(item.getStartX());
-                    item.setY(item.getStartY());
+                    Canvas.SetLeft(item.GetImage(), item.GetStartX());
+                    Canvas.SetTop(item.GetImage(), item.GetStartY());
+                    item.SetActualPosition(Position.OTHER);
+                    item.SetX(item.GetStartX());
+                    item.SetY(item.GetStartY());
 
                 }
             }
             else
             {
-                if ((item.getActualPosition() != Position.OTHER) && (item.getActualPosition() != item.getTargetPosition() 
-                    && (item.getPreviousPosition() != item.getActualPosition())))
+                if ((item.GetActualPosition() != Position.OTHER) && (item.GetActualPosition() != item.GetTargetPosition() 
+                    && (item.GetPreviousPosition() != item.GetActualPosition())))
                 {
                     Console.Beep();
                     mistakeCounter++;
                 }
-                item.setPreviousPosition(item.getActualPosition());
+                item.SetPreviousPosition(item.GetActualPosition());
             }
 
-            if (item.getActualPosition() == item.getTargetPosition())
+            if (item.GetActualPosition() == item.GetTargetPosition())
             {
-                item.setCorrectPostionFlag(true);
+                item.SetCorrectPostionFlag(true);
                 CheckFinallyCondition();
             }
-            else { item.setCorrectPostionFlag(false); }
+            else { item.SetCorrectPostionFlag(false); }
         }
 
         private bool CheckFinallyCondition() {
             bool resultCondition = true;
             for (int i = 0; i < itemsArray.Length; i++) {
-                if (itemsArray[i].getCorrectPosition() == false) {
+                if (itemsArray[i].GetCorrectPosition() == false) {
                     resultCondition = false;
                 }
             }
@@ -228,8 +223,7 @@ namespace EngineeringProjectApp
 
         private void ShowFinalScene() {
             var elapsedMs = watch.ElapsedMilliseconds/1000;
-
-            //BitmapImage bitmapImage = new BitmapImage(new Uri("balloonsImage.png", UriKind.Relative));
+            
             BitmapImage bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/balloonsImage.png"));
             Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
             Label label = new Label
@@ -278,16 +272,16 @@ namespace EngineeringProjectApp
         }
 
         private Position FindPosition(Item item) {
-            Position previousPosition = item.getActualPosition();
+            Position previousPosition = item.GetActualPosition();
             Position resultPosition;
-            if (item.getX() >= 10 && item.getX() <= 205
-                         && item.getY() >= 50 && item.getY() <= 360)
+            if (item.GetX() >= 10 && item.GetX() <= 205
+                         && item.GetY() >= 50 && item.GetY() <= 360)
             {
                 resultPosition = Position.TREE;
 
             }
-            else if (item.getX() >= 690 && item.getX() <= 885
-                        && item.getY() >= 215 && item.getY() <= 395)
+            else if (item.GetX() >= 690 && item.GetX() <= 885
+                        && item.GetY() >= 215 && item.GetY() <= 395)
             {
                 resultPosition = Position.SUNFLOWER;
 
@@ -325,8 +319,8 @@ namespace EngineeringProjectApp
             {
                 for (int i = 0; i < itemsArray.Length; i++)
                 {
-                    if (mainHandPoint.Position.X <= (itemsArray[i].getX() + shift) && mainHandPoint.Position.X >= (itemsArray[i].getX() - shift)
-                        && mainHandPoint.Position.Y <= (itemsArray[i].getY() + shift) && mainHandPoint.Position.Y >= (itemsArray[i].getY() - shift))
+                    if (mainHandPoint.Position.X <= (itemsArray[i].GetX() + shift) && mainHandPoint.Position.X >= (itemsArray[i].GetX() - shift)
+                        && mainHandPoint.Position.Y <= (itemsArray[i].GetY() + shift) && mainHandPoint.Position.Y >= (itemsArray[i].GetY() - shift))
                     {
                         MoveItem(mainHandPoint, itemsArray[i]);
                         break;
@@ -343,38 +337,36 @@ namespace EngineeringProjectApp
             OrangeDot.Fill = new SolidColorBrush(Colors.BlueViolet);
             if (mainHandJoint.Position.X <= width - offset)
             {
-                Canvas.SetLeft(item.getImage(), mainHandJoint.Position.X);
-                item.setX((float)mainHandJoint.Position.X);
+                Canvas.SetLeft(item.GetImage(), mainHandJoint.Position.X);
+                item.SetX((float)mainHandJoint.Position.X);
             }
             if (mainHandJoint.Position.Y <= height - offset)
             {
-                Canvas.SetTop(item.getImage(), mainHandJoint.Position.Y);
-                item.setY((float)mainHandJoint.Position.Y);
+                Canvas.SetTop(item.GetImage(), mainHandJoint.Position.Y);
+                item.SetY((float)mainHandJoint.Position.Y);
             }
-            item.setActualPosition(FindPosition(item));
+            item.SetActualPosition(FindPosition(item));
         }
 
         private Item AddItem(int x, int y, Item item) {
             BitmapImage bitmapImage=null;
-            switch (item.getItemType()) {
-                //case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("butterflyImage.png", UriKind.Relative)); break;
-                //case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("birdImage.png", UriKind.Relative)); break;
+            switch (item.GetItemType()) {
                 case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/butterflyImage.png")); break;
                 case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/birdImage.png"));  break;
             }
-            item.setImage(new Image
+            item.SetImage(new Image
             {
                 Height = 50,
                 Width = 50,
                 Source = bitmapImage
             });
-            mainCanva.Children.Add(item.getImage());
-            Canvas.SetLeft(item.getImage(), x);
-            Canvas.SetTop(item.getImage(), y);
-            item.setX(x);
-            item.setY(y);
-            item.setStartX(x);
-            item.setStartY(y);
+            mainCanva.Children.Add(item.GetImage());
+            Canvas.SetLeft(item.GetImage(), x);
+            Canvas.SetTop(item.GetImage(), y);
+            item.SetX(x);
+            item.SetY(y);
+            item.SetStartX(x);
+            item.SetStartY(y);
             return item;
         }
 
