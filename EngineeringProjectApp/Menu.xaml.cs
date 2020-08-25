@@ -1,8 +1,6 @@
-﻿using System;
+﻿using EngineeringProjectApp.Model;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +19,7 @@ namespace EngineeringProjectApp
         private int velocity;
         private List<UserModel> users = new List<UserModel>();
         private List<GameModel> games = new List<GameModel>();
+        private List<ResultModel> results = new List<ResultModel>();
 
         public Menu()
         {
@@ -31,23 +30,27 @@ namespace EngineeringProjectApp
             amountOfButterflies = 0;
             difficultyLevel = "";
             velocity = 0;
+            
             users = SqliteDataAccess.LoadAllUsers();
             UserList.ItemsSource = users;
 
+
             GameModel g = new GameModel
             {
-                UserId = 2,
+                UserId = 1,
                 Date = DateTime.Today.ToString(),
                 Level = "Łatwy",
                 Returning = 1,
-                AmountOfButterflies = 10,
-                AmountOfBirds = 5,
-                Time="20 s"
+                AmountOfButterflies = 4,
+                AmountOfBirds = 3,
+                Time="23 s"
     };
             SqliteDataAccess.SaveGame(g);
             games = SqliteDataAccess.LoadAllGames();
-            foreach (GameModel game in games)
-                Console.WriteLine(game.ToString());
+            results = SqliteDataAccess.LoadGamesForUser("Łatwy");
+
+            foreach (ResultModel r in results)
+                Console.WriteLine(r.ToString());
 
         }
 
@@ -59,6 +62,7 @@ namespace EngineeringProjectApp
             amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
             difficultyLevel = DificultyLevelComboBox.Text;
             velocity = int.Parse(VelocityBox.Text);
+
             if (ValidArgument(amountOfBirds, amountOfButterflies) && ValidUser(UserList.SelectedItems.Count)){
                 MainWindow mainWindow = new MainWindow(amountOfBirds, amountOfButterflies, hand, returningFlag, difficultyLevel, velocity, (UserModel)UserList.SelectedItems[0]);
                 mainWindow.Show();
@@ -138,6 +142,15 @@ namespace EngineeringProjectApp
                 SqliteDataAccess.DeleteUser(user.Id);
                 users = SqliteDataAccess.LoadAllUsers();
                 UserList.ItemsSource = users;
+            }
+        }
+
+        private void BtnStatistics_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValidUser((UserList.SelectedItems.Count)))
+            {
+                Statistics statisticsWindow = new Statistics();
+                statisticsWindow.Show();
             }
         }
     }

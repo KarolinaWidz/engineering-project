@@ -6,7 +6,7 @@
         xmlns:k="http://schemas.microsoft.com/kinect/2013"
         xmlns:local="clr-namespace:EngineeringProjectApp" 
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized">
+        Title="Dopasuj zwierzątka" WindowState="Maximized">
     <Grid>
 
         <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="kinectChooser" >

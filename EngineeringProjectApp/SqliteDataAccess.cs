@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EngineeringProjectApp.Model;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -65,6 +66,17 @@ namespace EngineeringProjectApp
                     game.UserId, game.Date, game.Level, game.Returning, game.AmountOfButterflies, game.AmountOfBirds, game.Time
 
                 });
+            }
+        }
+
+        public static List<ResultModel> LoadGamesForUser(string level)
+        {        
+
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string query = "select User.FirstName, User.LastName, Game.Date, Game.Level, Game.Returning, Game.AmountOfButterflies, Game.AmountOfBirds, Game.Time from User inner join Game on User.Id = Game.UserId where Game.Level like @value";
+                var output = cnn.Query<ResultModel>(query, new { value = level });
+                return output.ToList();
             }
         }
 

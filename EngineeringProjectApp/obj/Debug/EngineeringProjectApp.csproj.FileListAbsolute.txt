@@ -139,3 +139,5 @@ G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\D
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\Dapper.xml
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\bin\Debug\gameDb.db
 G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\EngineeringProjectApp_Content.g.cs
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\Statistics.g.cs
+G:\Studia\6 semestr\PRACA INŻ\EngineeringProjectApp\EngineeringProjectApp\obj\Debug\Statistics.baml
