@@ -1,5 +1,4 @@
 ﻿using EngineeringProjectApp.Model;
-using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +18,6 @@ namespace EngineeringProjectApp
         private int velocity;
         private List<UserModel> users = new List<UserModel>();
         private List<GameModel> games = new List<GameModel>();
-        private List<ResultModel> results = new List<ResultModel>();
 
         public Menu()
         {
@@ -30,27 +28,8 @@ namespace EngineeringProjectApp
             amountOfButterflies = 0;
             difficultyLevel = "";
             velocity = 0;
-            
             users = SqliteDataAccess.LoadAllUsers();
             UserList.ItemsSource = users;
-
-
-            GameModel g = new GameModel
-            {
-                UserId = 1,
-                Date = DateTime.Today.ToString(),
-                Level = "Łatwy",
-                Returning = 1,
-                AmountOfButterflies = 4,
-                AmountOfBirds = 3,
-                Time="23 s"
-    };
-            SqliteDataAccess.SaveGame(g);
-            games = SqliteDataAccess.LoadAllGames();
-            results = SqliteDataAccess.LoadGamesForUser("Łatwy");
-
-            foreach (ResultModel r in results)
-                Console.WriteLine(r.ToString());
 
         }
 
@@ -149,7 +128,8 @@ namespace EngineeringProjectApp
         {
             if (ValidUser((UserList.SelectedItems.Count)))
             {
-                Statistics statisticsWindow = new Statistics();
+                UserModel user = (UserModel)UserList.SelectedItems[0];
+                Statistics statisticsWindow = new Statistics(user.Id);
                 statisticsWindow.Show();
             }
         }

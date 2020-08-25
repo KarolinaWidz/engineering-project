@@ -10,7 +10,7 @@
         public int Returning { get; set; }
         public int AmountOfButterflies { get; set; }
         public int AmountOfBirds { get; set; }
-        public string Time { get; set; }
+        public int Time { get; set; }
         
 
 

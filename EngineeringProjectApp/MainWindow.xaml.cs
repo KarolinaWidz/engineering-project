@@ -11,8 +11,8 @@ using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using System.Media;
 using System.Diagnostics;
-
-
+using EngineeringProjectApp.Model;
+using System.Collections.Generic;
 
 namespace EngineeringProjectApp
 {
@@ -35,6 +35,7 @@ namespace EngineeringProjectApp
         private int velocity;
         private UserModel activeUser;
         private Stopwatch watch;
+        private GameModel activeGame;
 
         public MainWindow()
         {
@@ -209,7 +210,7 @@ namespace EngineeringProjectApp
             else { item.SetCorrectPostionFlag(false); }
         }
 
-        private bool CheckFinallyCondition() {
+        private void CheckFinallyCondition() {
             bool resultCondition = true;
             for (int i = 0; i < itemsArray.Length; i++) {
                 if (itemsArray[i].GetCorrectPosition() == false) {
@@ -218,9 +219,20 @@ namespace EngineeringProjectApp
             }
             if (resultCondition == true) {
                 watch.Stop();
+                activeGame = new GameModel
+                {
+                    Date = DateTime.Today.ToString(),
+                    Level = difficultyLevel,
+                    AmountOfBirds = amountOfBirds,
+                    AmountOfButterflies = amountOfButterflies,
+                    Returning = (returningFlag) ? 1 : 0,
+                    UserId = activeUser.Id,
+                    Time = (int)watch.ElapsedMilliseconds / 1000
+                };
+                SqliteDataAccess.SaveGame(activeGame);
                 ShowFinalScene();
+                
             }
-            return resultCondition;
         }
 
         private void ShowFinalScene() {
@@ -259,7 +271,7 @@ namespace EngineeringProjectApp
             Canvas.SetTop(label, height/5*3);
             Canvas.SetLeft(label, width/4);
             Canvas.SetTop(label2, height / 5 * 3+35);
-            Canvas.SetLeft(label2, width / 4);
+            Canvas.SetLeft(label2, width / 5);
             Canvas.SetLeft(button, width / 3);
             Canvas.SetTop(button, height / 5 * 4);
             Canvas.SetLeft(image, 0);

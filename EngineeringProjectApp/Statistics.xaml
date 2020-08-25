@@ -13,6 +13,7 @@
             <ComboBoxItem Content="Średni"/>
             <ComboBoxItem Content="Trudny"/>
         </ComboBox>
+        <Button Content="Wyświetl" HorizontalAlignment="Left" Margin="530,20,0,0" VerticalAlignment="Top" Width="219" Click="BtnShow_Click"/>
         <Button Content="Powrót" HorizontalAlignment="Left" Margin="343,380,0,0" VerticalAlignment="Top" Width="92" Click="BtnReturn_Click"/>
         <CheckBox Name="ReturningCheckBox" Content="Powrót zwierzątek" HorizontalAlignment="Left" Margin="295,20,0,0" VerticalAlignment="Top" Height="22"/>
         <ListView 
@@ -127,7 +128,7 @@
                     <GridViewColumn Width="80">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="Czas Gry" Margin="2" />
+                                <TextBlock Text="Czas Gry [s]" Margin="2" />
                             </DataTemplate>
                         </GridViewColumn.HeaderTemplate>
                         <GridViewColumn.CellTemplate>

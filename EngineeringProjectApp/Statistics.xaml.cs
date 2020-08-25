@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EngineeringProjectApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,27 @@ namespace EngineeringProjectApp
     /// </summary>
     public partial class Statistics : Window
     {
-        public Statistics()
+        private List<ResultModel> results;
+        private int userId;
+
+        public Statistics(int userId)
         {
             InitializeComponent();
+            this.userId = userId;
+
+            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId);
+            StatisticsList.ItemsSource = results;
         }
 
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+       
+        private void BtnShow_Click(object sender, RoutedEventArgs e)
+        {
+            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId);
+            StatisticsList.ItemsSource = results;
         }
     }
 }

@@ -69,13 +69,13 @@ namespace EngineeringProjectApp
             }
         }
 
-        public static List<ResultModel> LoadGamesForUser(string level)
+        public static List<ResultModel> LoadGamesForUser(string level, int userId)
         {        
 
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = "select User.FirstName, User.LastName, Game.Date, Game.Level, Game.Returning, Game.AmountOfButterflies, Game.AmountOfBirds, Game.Time from User inner join Game on User.Id = Game.UserId where Game.Level like @value";
-                var output = cnn.Query<ResultModel>(query, new { value = level });
+                string query = "select User.FirstName, User.LastName, Game.Date, Game.Level, Game.Returning, Game.AmountOfButterflies, Game.AmountOfBirds, Game.Time from User inner join Game on User.Id = Game.UserId where Game.Level like @value and  User.Id = @id order by Game.Time";
+                var output = cnn.Query<ResultModel>(query, new { value = level, id = userId });
                 return output.ToList();
             }
         }

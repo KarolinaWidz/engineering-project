@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450"
              Background="White" Width="772">
-    <Grid Margin="0,0,38,0">
+    <Grid Margin="0,0,0,0">
         <Button Content="Rozpocznij grę" HorizontalAlignment="Left" Margin="330,401,0,0" VerticalAlignment="Top" Width="92" Click="Button_Click"/>
         <ComboBox Name="DificultyLevelComboBox" HorizontalAlignment="Left" Margin="154,54,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem Content="Łatwy" IsSelected="True"/>
@@ -32,7 +32,7 @@
         <TextBox Name ="VelocityBox" Text="{Binding ElementName=VelocitySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" HorizontalAlignment="Left" Height="23" Margin="295,202,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" IsReadOnly="True"/>
         <Label Content="Wybór użytkownika: " HorizontalAlignment="Left" Margin="450,50,0,0" VerticalAlignment="Top" Width="146"/>
         <ListView 
-            x:Name="UserList" Margin="450,85,0,177">
+            x:Name="UserList" Margin="450,85,38,177">
             <ListView.View>
                 <GridView AllowsColumnReorder="True">
                     <GridViewColumn Width="100">
