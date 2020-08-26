@@ -95,6 +95,11 @@ namespace EngineeringProjectApp
                     sensor = null;
                 }
             }
+            else
+            {
+                MessageBox.Show("Nie wykryto urządzenia", "Błąd!");
+                Close();
+            }
         }
 
         protected void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)

@@ -28,7 +28,7 @@ namespace EngineeringProjectApp
             InitializeComponent();
             this.userId = userId;
 
-            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId);
+            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId, ReturningCheckBox.IsChecked == true?1:0);
             StatisticsList.ItemsSource = results;
         }
 
@@ -39,7 +39,7 @@ namespace EngineeringProjectApp
        
         private void BtnShow_Click(object sender, RoutedEventArgs e)
         {
-            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId);
+            results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId, ReturningCheckBox.IsChecked == true ? 1 : 0);
             StatisticsList.ItemsSource = results;
         }
     }
