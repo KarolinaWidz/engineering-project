@@ -119,6 +119,7 @@ namespace EngineeringProjectApp
             {
                 UserModel user = (UserModel)UserList.SelectedItems[0];
                 SqliteDataAccess.DeleteUser(user.Id);
+                SqliteDataAccess.DeleteGames(user.Id);
                 users = SqliteDataAccess.LoadAllUsers();
                 UserList.ItemsSource = users;
             }

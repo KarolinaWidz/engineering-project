@@ -85,7 +85,7 @@
         </ListView>
         <Label Content="Imię:" HorizontalAlignment="Left" Margin="485,292,0,0" VerticalAlignment="Top" Width="40"/>
         <Label Content="Nazwisko:" HorizontalAlignment="Left" Margin="453,318,0,0" VerticalAlignment="Top" Width="72"/>
-        <WrapPanel Margin="453,356,-41,45" RenderTransformOrigin="0.236,0.444">
+        <WrapPanel Margin="453,356,10,45" RenderTransformOrigin="0.236,0.444">
             <Button Content="Dodaj" x:Name="btnAdd" Margin="5"
                 Click="BtnAdd_Click" />
             <Button Content="Edytuj" x:Name="btnEdit" Margin="5"
@@ -93,10 +93,10 @@
             <Button Content="Usuń" x:Name="btnDelete" Margin="5"
                 Click="BtnDelete_Click" />
             <Button Content="Wyświetl Statystyki" x:Name="btnStatistics" Margin="5"
-                Click="BtnStatistics_Click" Width="141" />
+                Click="BtnStatistics_Click" Width="133" />
         </WrapPanel>
-        <TextBox Name="FirstNameTextBox" HorizontalAlignment="Left" Height="23" Margin="530,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="204"/>
-        <TextBox Name="LastNameTextBox" HorizontalAlignment="Left" Height="23" Margin="530,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="204"/>
+        <TextBox Name="FirstNameTextBox" HorizontalAlignment="Left" Height="23" Margin="530,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195"/>
+        <TextBox Name="LastNameTextBox" HorizontalAlignment="Left" Height="23" Margin="530,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195"/>
     </Grid>
 
 </UserControl>

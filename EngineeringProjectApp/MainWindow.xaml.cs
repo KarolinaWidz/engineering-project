@@ -54,6 +54,17 @@ namespace EngineeringProjectApp
             this.difficultyLevel = difficultyLevel;
             this.velocity = velocity;
             this.activeUser = activeUser;
+            FirstNameLabel.Content = activeUser.FirstName.ToString();
+            LastNameLabel.Content = activeUser.LastName.ToString();
+            LevelLabel.Content = difficultyLevel;
+            ButterfliesLabel.Content = amountOfButterflies.ToString();
+            BirdsLabel.Content = amountOfBirds.ToString();
+            if (difficultyLevel == "Trudny")
+                VelocityLabel.Content = velocity.ToString();
+            else if (difficultyLevel == "Średni")
+                VelocityLabel.Content = 2;
+            
+           
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -151,9 +162,11 @@ namespace EngineeringProjectApp
                                 ScanItems(mainHand, skel.Joints[JointType.Head], otherHand);
                                 
                             }
+                            
                         }
                     }
                 }
+                TimeLabel.Content = (int)watch.ElapsedMilliseconds / 1000 + " s";
                 drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
 
             }
@@ -203,6 +216,7 @@ namespace EngineeringProjectApp
                 {
                     Console.Beep();
                     mistakeCounter++;
+                    MistakesLabel.Content = mistakeCounter.ToString();
                 }
                 item.SetPreviousPosition(item.GetActualPosition());
             }

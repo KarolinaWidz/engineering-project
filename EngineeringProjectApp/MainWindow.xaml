@@ -6,17 +6,38 @@
         xmlns:k="http://schemas.microsoft.com/kinect/2013"
         xmlns:local="clr-namespace:EngineeringProjectApp" 
         mc:Ignorable="d"
-        Title="Dopasuj zwierzątka" WindowState="Maximized">
+        Title="Dopasuj zwierzątka" WindowState="Maximized" d:DesignWidth="1200" d:DesignHeight="720">
     <Grid>
+        <StackPanel HorizontalAlignment="Left" Background="WhiteSmoke" Height="230" Margin="977,35,0,0" VerticalAlignment="Top" Width="205" >
+            <Label Content="Imię:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615" Margin="28,0,0,0"/>
+            <Label Content="Nazwisko:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Poziom:" HorizontalAlignment="Left" Margin="11,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Motylki:" HorizontalAlignment="Left" Margin="11,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Ptaszki:" HorizontalAlignment="Left" Margin="14,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Prędkość:" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Pomyłki:" HorizontalAlignment="Left" Margin="9,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+            <Label Content="Czas gry:" HorizontalAlignment="Left" Margin="6,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,-0.615"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Background="WhiteSmoke" Height="230" Margin="1046,35,0,0" VerticalAlignment="Top" Width="136" >
+            <Label x:Name="FirstNameLabel"  Content="Imię" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="LastNameLabel" Content="Nazwisko" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="LevelLabel" Content="Poziom" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+            <Label x:Name="ButterfliesLabel" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="BirdsLabel" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="VelocityLabel" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="MistakesLabel" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="TimeLabel" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </StackPanel>
 
-        <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="kinectChooser" >
 
-        </k:KinectSensorChooserUI>
+        <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="kinectChooser" />
 
 
-        <Canvas Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Top" Name="mainCanva" Width="960" Height="720">
-            <Image Name="Image"  HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="0" Canvas.Top="0" Width="960" Height="720"/>  <!--Source="/Resources/backgroundImage.png"-->
-            <Ellipse Fill="OrangeRed"  Name="OrangeDot" Stretch="Uniform" Canvas.Left="10" Canvas.Top="10" Width="20" Height="20" RenderTransformOrigin="13.3,5.35"/>
+        <Canvas Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="mainCanva" Width="960" Height="720">
+            <Image x:Name="Image"  HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="0" Canvas.Top="0" Width="960" Height="720"/>
+            <!--Source="/Resources/backgroundImage.png"-->
+            <Ellipse Fill="OrangeRed"  x:Name="OrangeDot" Stretch="Uniform" Canvas.Left="10" Canvas.Top="10" Width="20" Height="20" RenderTransformOrigin="13.3,5.35"/>
         </Canvas>
+
     </Grid>
 </Window>

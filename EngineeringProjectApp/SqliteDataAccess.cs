@@ -54,6 +54,15 @@ namespace EngineeringProjectApp
             }
         }
 
+        public static void DeleteGames(int id)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                string query = "DELETE FROM Game WHERE UserId=@id";
+                cnn.Execute(query, new { id });
+            }
+        }
+
         public static void SaveGame(GameModel game)
         {
 
