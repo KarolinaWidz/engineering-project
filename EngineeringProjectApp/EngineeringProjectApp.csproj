@@ -7,7 +7,7 @@
     <ProjectGuid>{F5852421-B4B5-4B7F-B774-A228105F94CC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EngineeringProjectApp</RootNamespace>
-    <AssemblyName>EngineeringProjectApp</AssemblyName>
+    <AssemblyName>Dopasuj zwierzątka</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -129,27 +129,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CameraPreview.xaml.cs">
+    <Compile Include="Game\CameraPreview.xaml.cs">
       <DependentUpon>CameraPreview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\GameModel.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemType.cs" />
-    <Compile Include="Menu.xaml.cs">
+    <Compile Include="AdministrationPanel\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\ResultModel.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="SqliteDataAccess.cs" />
     <Compile Include="Model\UserModel.cs" />
-    <Compile Include="Statistics.xaml.cs">
+    <Compile Include="AdministrationPanel\Statistics.xaml.cs">
       <DependentUpon>Statistics.xaml</DependentUpon>
     </Compile>
-    <Page Include="CameraPreview.xaml">
+    <Page Include="Game\CameraPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Game\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -157,15 +157,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Game\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Menu.xaml">
+    <Page Include="AdministrationPanel\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Statistics.xaml">
+    <Page Include="AdministrationPanel\Statistics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,6 +246,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
