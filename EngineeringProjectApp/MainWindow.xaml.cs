@@ -11,8 +11,6 @@ using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using System.Media;
 using System.Diagnostics;
-using EngineeringProjectApp.Model;
-using System.Collections.Generic;
 
 namespace EngineeringProjectApp
 {
@@ -36,6 +34,7 @@ namespace EngineeringProjectApp
         private UserModel activeUser;
         private Stopwatch watch;
         private GameModel activeGame;
+        private TransformSmoothParameters smoothParameters;
 
         public MainWindow()
         {
@@ -55,7 +54,6 @@ namespace EngineeringProjectApp
             this.velocity = velocity;
             this.activeUser = activeUser;
             FirstNameLabel.Content = activeUser.FirstName.ToString();
-            LastNameLabel.Content = activeUser.LastName.ToString();
             LevelLabel.Content = difficultyLevel;
             ButterfliesLabel.Content = amountOfButterflies.ToString();
             BirdsLabel.Content = amountOfBirds.ToString();
@@ -69,7 +67,7 @@ namespace EngineeringProjectApp
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            TransformSmoothParameters smoothParameters = new TransformSmoothParameters();
+            smoothParameters = new TransformSmoothParameters();
             {
                 smoothParameters.Smoothing = 0.7f;
                 smoothParameters.Correction = 0.3f;
@@ -112,7 +110,7 @@ namespace EngineeringProjectApp
                 Close();
             }
         }
-
+        
         protected void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             Skeleton[] skeletons = new Skeleton[0];
@@ -168,7 +166,7 @@ namespace EngineeringProjectApp
                 }
                 TimeLabel.Content = (int)watch.ElapsedMilliseconds / 1000 + " s";
                 drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
-
+               
             }
         }
 
@@ -353,6 +351,7 @@ namespace EngineeringProjectApp
             int shift = 25;
             if (otherHandPoint.Position.Y < HeadPoint.Position.Y)
             {
+                OrangeDot.Fill = new SolidColorBrush(Colors.DarkCyan);
                 for (int i = 0; i < itemsArray.Length; i++)
                 {
                     if (mainHandPoint.Position.X <= (itemsArray[i].GetX() + shift) && mainHandPoint.Position.X >= (itemsArray[i].GetX() - shift)
@@ -459,6 +458,13 @@ namespace EngineeringProjectApp
                     null,
                     new Rect(width - 10.0f, 0, 10.0f, width));           
             }
+        }
+
+        private void BtnCameraPreview(object sender, RoutedEventArgs e)
+        {
+            CameraPreview previewWindow = new CameraPreview(sensor,smoothParameters,watch);
+            previewWindow.Show();
+            watch.Stop();
         }
     }
 }

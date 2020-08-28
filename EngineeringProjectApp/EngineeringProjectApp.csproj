@@ -82,8 +82,13 @@
     <Reference Include="Microsoft.Kinect.Toolkit.Controls">
       <HintPath>C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Assemblies\Microsoft.Kinect.Toolkit.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Kinect.Toolkit.Interaction">
+    <Reference Include="Microsoft.Kinect.Toolkit.Interaction, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Assemblies\Microsoft.Kinect.Toolkit.Interaction.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Samples.Kinect.WpfViewers, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\HP\Desktop\ShapeGame\bin\Debug\Microsoft.Samples.Kinect.WpfViewers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -124,6 +129,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CameraPreview.xaml.cs">
+      <DependentUpon>CameraPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\GameModel.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemType.cs" />
@@ -137,6 +145,10 @@
     <Compile Include="Statistics.xaml.cs">
       <DependentUpon>Statistics.xaml</DependentUpon>
     </Compile>
+    <Page Include="CameraPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

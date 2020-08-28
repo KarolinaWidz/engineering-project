@@ -1,0 +1,16 @@
+﻿<Window x:Class="EngineeringProjectApp.CameraPreview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EngineeringProjectApp"
+        mc:Ignorable="d"
+        Title="Podgląd obrazu" Height="480" Width="597.858">
+    <Grid Margin="0,0,0,0">
+        
+        <Canvas Name="Preview" HorizontalAlignment="Center" Height="320"  VerticalAlignment="Center" Width="550" Margin="20,110,20,19"/>
+        <Label Content="Ustaw kinecta tak, aby kamera obejmowała Twoją" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"  Height="54" Width="452" Margin="68,3,70,0"/>
+        <Label Content=" sylwetkę z podniesionymi rękami do góry" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"  Height="54" Width="406" Margin="116,42,68,0" />
+
+    </Grid>
+</Window>
