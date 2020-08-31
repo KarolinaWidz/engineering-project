@@ -26,8 +26,8 @@ namespace EngineeringProjectApp
         private Item[] itemsArray;
         private int amountOfBirds;
         private int amountOfButterflies;
-        private string hand;
-        private bool returningFlag;
+        private string chosenHand;
+        private bool returningItems;
         private int mistakeCounter;
         private string difficultyLevel;
         private int velocity;
@@ -36,33 +36,27 @@ namespace EngineeringProjectApp
         private GameModel activeGame;
         private TransformSmoothParameters smoothParameters;
 
-        public MainWindow()
+        public MainWindow(int amountOfBirds, int amountOfButterflies, string chosenHand, bool returningItems, string difficultyLevel, int velocity, UserModel activeUser)
         {
             InitializeComponent();
             Loaded += WindowLoaded;
-        }
-        public MainWindow(int amountOfBirds, int amountOfButterflies, string hand, bool returningFlag, string difficultyLevel, int velocity, UserModel activeUser)
-        {
-            InitializeComponent();
-            Loaded += WindowLoaded;
+            Closing += WindowClosing;
             this.amountOfBirds = amountOfBirds;
             this.amountOfButterflies = amountOfButterflies;
-            this.hand = hand;
-            this.returningFlag = returningFlag;
+            this.chosenHand = chosenHand;
+            this.returningItems = returningItems;
             this.mistakeCounter = 0;
             this.difficultyLevel = difficultyLevel;
             this.velocity = velocity;
             this.activeUser = activeUser;
-            FirstNameLabel.Content = activeUser.FirstName.ToString();
+            FirstNameLabel.Content = activeUser.FirstName;
             LevelLabel.Content = difficultyLevel;
-            ButterfliesLabel.Content = amountOfButterflies.ToString();
-            BirdsLabel.Content = amountOfBirds.ToString();
+            ButterfliesLabel.Content = amountOfButterflies;
+            BirdsLabel.Content = amountOfBirds;
             if (difficultyLevel == "Trudny")
                 VelocityLabel.Content = velocity.ToString();
             else if (difficultyLevel == "Średni")
                 VelocityLabel.Content = 2;
-            
-           
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -75,6 +69,7 @@ namespace EngineeringProjectApp
                 smoothParameters.JitterRadius = 1.0f;
                 smoothParameters.MaxDeviationRadius = 0.5f;
             }
+
             drawingGroup = new DrawingGroup();
             imageSource = new DrawingImage(drawingGroup);
             Image.Source = imageSource;
@@ -110,7 +105,7 @@ namespace EngineeringProjectApp
                 Close();
             }
         }
-        
+
         protected void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             Skeleton[] skeletons = new Skeleton[0];
@@ -128,63 +123,67 @@ namespace EngineeringProjectApp
             {
                 dc.DrawImage(new BitmapImage(new Uri("pack://application:,,,/Resources/backgroundImage.png")), new Rect(0.0, 0.0, width, height));
                 if (skeletons.Length != 0)
-                { 
-                    Skeleton skel=skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
-                    if (skel != null)
+                {
+                    Skeleton mainSkeleton = skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
+                    if (mainSkeleton != null)
                     {
-                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
+                        if (mainSkeleton.TrackingState == SkeletonTrackingState.Tracked)
                         {
                             Joint mainHand;
                             Joint otherHand;
-                            if (hand == "Prawa")
+                            if (chosenHand == "Prawa")
                             {
-                                mainHand = skel.Joints[JointType.HandRight];
-                                otherHand = skel.Joints[JointType.HandLeft];
+                                mainHand = mainSkeleton.Joints[JointType.HandRight];
+                                otherHand = mainSkeleton.Joints[JointType.HandLeft];
                             }
-                            else {
-                                mainHand = skel.Joints[JointType.HandLeft];
-                                otherHand = skel.Joints[JointType.HandRight];
+                            else
+                            {
+                                mainHand = mainSkeleton.Joints[JointType.HandLeft];
+                                otherHand = mainSkeleton.Joints[JointType.HandRight];
                             }
                             CheckBoundaries(mainHand, dc);
-                            if (difficultyLevel == "Średni") {
-                                ManyItemsFly(2);
+                            if (difficultyLevel == "Średni")
+                            {
+                                StartFlyingForAll(2);
                             }
-                            if (difficultyLevel == "Trudny") {
-                                ManyItemsFly(velocity);
+                            if (difficultyLevel == "Trudny")
+                            {
+                                StartFlyingForAll(velocity);
                             }
-
 
                             if (mainHand.TrackingState == JointTrackingState.Tracked || mainHand.TrackingState == JointTrackingState.Inferred)
                             {
                                 DrawTrasmorfedPoint(mainHand);
-                                ScanItems(mainHand, skel.Joints[JointType.Head], otherHand);
-                                
+                                ScanItems(mainHand, mainSkeleton.Joints[JointType.Head], otherHand);
                             }
-                            
                         }
                     }
                 }
                 TimeLabel.Content = (int)watch.ElapsedMilliseconds / 1000 + " s";
                 drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, width, height));
-               
+
             }
         }
 
-        private void StartFlying(Item item,int shiftLeft, int shiftTop) {
+        private void StartFlying(Item item, int shiftLeft, int shiftTop)
+        {
             if ((item.GetX() + shiftLeft) <= 680 && (item.GetX() + shiftLeft) >= 210
-                && (item.GetY() + shiftTop) <= 600 && (item.GetY() + shiftTop) >= 40) {
+                && (item.GetY() + shiftTop) <= 600 && (item.GetY() + shiftTop) >= 40)
+            {
                 Canvas.SetLeft(item.GetImage(), item.GetX() + shiftLeft);
                 Canvas.SetTop(item.GetImage(), item.GetY() + shiftTop);
                 item.SetX(item.GetX() + shiftLeft);
                 item.SetY(item.GetY() + shiftTop);
             }
-            
+
         }
 
-        private void ManyItemsFly(int velocity) {
+        private void StartFlyingForAll(int velocity)
+        {
             Random r = new Random();
-            for (int i = 0; i < itemsArray.Length; i++) {
-                switch (r.Next(0,4))
+            for (int i = 0; i < itemsArray.Length; i++)
+            {
+                switch (r.Next(0, 4))
                 {
                     case 0: StartFlying(itemsArray[i], velocity, 0); break;
                     case 1: StartFlying(itemsArray[i], -velocity, 0); break;
@@ -194,8 +193,10 @@ namespace EngineeringProjectApp
             }
         }
 
-        private void CheckPosition(Item item) {
-            if (returningFlag) {
+        private void CheckItemPosition(Item item)
+        {
+            if (returningItems)
+            {
                 if ((item.GetActualPosition() != Position.OTHER) && (item.GetActualPosition() != item.GetTargetPosition()))
                 {
                     Console.Beep();
@@ -209,12 +210,12 @@ namespace EngineeringProjectApp
             }
             else
             {
-                if ((item.GetActualPosition() != Position.OTHER) && (item.GetActualPosition() != item.GetTargetPosition() 
+                if ((item.GetActualPosition() != Position.OTHER) && (item.GetActualPosition() != item.GetTargetPosition()
                     && (item.GetPreviousPosition() != item.GetActualPosition())))
                 {
                     Console.Beep();
                     mistakeCounter++;
-                    MistakesLabel.Content = mistakeCounter.ToString();
+                    MistakeLabel.Content = mistakeCounter.ToString();
                 }
                 item.SetPreviousPosition(item.GetActualPosition());
             }
@@ -227,124 +228,126 @@ namespace EngineeringProjectApp
             else { item.SetCorrectPostionFlag(false); }
         }
 
-        private void CheckFinallyCondition() {
+        private void CheckFinallyCondition()
+        {
             bool resultCondition = true;
-            for (int i = 0; i < itemsArray.Length; i++) {
-                if (itemsArray[i].GetCorrectPosition() == false) {
+            for (int i = 0; i < itemsArray.Length; i++)
+            {
+                if (itemsArray[i].GetCorrectPosition() == false)
+                {
                     resultCondition = false;
                 }
             }
-            if (resultCondition == true) {
+            if (resultCondition == true)
+            {
                 watch.Stop();
                 activeGame = new GameModel
                 {
-                    Date = DateTime.Today.ToString(),
+                    Date = DateTime.Today.ToString().Split(' ')[0],
                     Level = difficultyLevel,
                     AmountOfBirds = amountOfBirds,
                     AmountOfButterflies = amountOfButterflies,
-                    Returning = (returningFlag) ? 1 : 0,
+                    Returning = (returningItems) ? 1 : 0,
                     UserId = activeUser.Id,
                     Time = (int)watch.ElapsedMilliseconds / 1000
                 };
                 SqliteDataAccess.SaveGame(activeGame);
                 ShowFinalScene();
-                
+
             }
         }
 
-        private void ShowFinalScene() {
-            var elapsedMs = watch.ElapsedMilliseconds/1000;
-            
+        private void ShowFinalScene()
+        {
+            var elapsedTime = watch.ElapsedMilliseconds / 1000;
             BitmapImage bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/balloonsImage.png"));
-            Image image = new Image{ Width = width, Height = height, Source = bitmapImage };
+            Image image = new Image { Width = width, Height = height, Source = bitmapImage };
             string message;
-            if (activeUser.FirstName.ToString()[activeUser.FirstName.ToString().Length-1] != 'a' || activeUser.FirstName.ToString()=="Kuba") message = " Ukończyłeś poziom: ";
+            if (activeUser.FirstName[activeUser.FirstName.Length - 1] != 'a' || activeUser.FirstName == "Kuba") message = " Ukończyłeś poziom: ";
             else message = " Ukończyłaś poziom: ";
-            Label label = new Label
+            Label firstLine = new Label
             {
-                Content = activeUser.FirstName.ToString()+"!"+message+difficultyLevel.ToString(),
-                FontSize = 30
-                
-            };
-
-            Label label2 = new Label
-            {
-                Content = "Czas gry: " + elapsedMs.ToString()+" s, liczba pomyłek: " + mistakeCounter.ToString() + ",",
+                Content = activeUser.FirstName + "!" + message + difficultyLevel,
                 FontSize = 30
 
             };
-            Button button = new Button
+
+            Label secondLine = new Label
+            {
+                Content = "Czas gry: " + elapsedTime + " s, liczba pomyłek: " + mistakeCounter + ",",
+                FontSize = 30
+
+            };
+            Button returnButton = new Button
             {
                 Content = "Powrót do menu",
                 FontSize = 30
             };
-            button.Click += BtnClick;
+            returnButton.Click += ReturnButtonClick;
 
-            
+
             mainCanva.Children.Add(image);
-            mainCanva.Children.Add(label);
-            mainCanva.Children.Add(label2);
-            mainCanva.Children.Add(button);
-            Canvas.SetTop(label, height/5*3);
-            Canvas.SetLeft(label, width/4);
-            Canvas.SetTop(label2, height / 5 * 3+35);
-            Canvas.SetLeft(label2, width / 5);
-            Canvas.SetLeft(button, width / 3);
-            Canvas.SetTop(button, height / 5 * 4);
+            mainCanva.Children.Add(firstLine);
+            mainCanva.Children.Add(secondLine);
+            mainCanva.Children.Add(returnButton);
+            Canvas.SetTop(firstLine, height / 5 * 3);
+            Canvas.SetLeft(firstLine, width / 4);
+            Canvas.SetTop(secondLine, height / 5 * 3 + 35);
+            Canvas.SetLeft(secondLine, width / 4);
+            Canvas.SetLeft(returnButton, width / 3);
+            Canvas.SetTop(returnButton, height / 5 * 4);
             Canvas.SetLeft(image, 0);
             Canvas.SetTop(image, 0);
             SoundPlayer soundPlayerAction = new SoundPlayer(Properties.Resources.fanfareSound);
             soundPlayerAction.PlaySync();
         }
 
-        private void BtnClick(object sender, RoutedEventArgs e)
+        private void ReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            this.itemsArray = new Item[0];
-            this.mistakeCounter = 0;
-            this.Content = new Menu();
-            this.Show();
+            itemsArray = new Item[0];
+            mistakeCounter = 0;
+            Content = new Menu();
+            Show();
         }
 
-        private Position FindPosition(Item item) {
+        private Position FindItemPosition(Item item)
+        {
             Position previousPosition = item.GetActualPosition();
             Position resultPosition;
             if (item.GetX() >= 10 && item.GetX() <= 205
                          && item.GetY() >= 50 && item.GetY() <= 360)
-            {
                 resultPosition = Position.TREE;
-
-            }
             else if (item.GetX() >= 690 && item.GetX() <= 885
                         && item.GetY() >= 215 && item.GetY() <= 395)
-            {
                 resultPosition = Position.SUNFLOWER;
-
-            }
-            else resultPosition = Position.OTHER;
-            CheckPosition(item);
+            else
+                resultPosition = Position.OTHER;
+            CheckItemPosition(item);
             return resultPosition;
         }
 
 
-        private void AddManyItems() {
+        private void AddManyItems()
+        {
             itemsArray = new Item[amountOfButterflies + amountOfBirds];
             Random r = new Random();
             int randomWidth, randomHeight;
-            for (int i = 0; i < amountOfBirds; i++) {
+            for (int i = 0; i < amountOfBirds; i++)
+            {
                 randomWidth = r.Next(210, 680);
                 randomHeight = r.Next(40, 600);
                 itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BIRD, Position.TREE));
             }
-            for (int i = amountOfBirds; i < itemsArray.Length; i++) {
+            for (int i = amountOfBirds; i < itemsArray.Length; i++)
+            {
                 randomWidth = r.Next(210, 680);
                 randomHeight = r.Next(40, 600);
                 itemsArray[i] = AddItem(randomWidth, randomHeight, new Item(ItemType.BUTTERFLY, Position.SUNFLOWER));
             }
-           
         }
 
-        private void ScanItems(Joint mainHand, Joint head, Joint otherHand) {
-
+        private void ScanItems(Joint mainHand, Joint head, Joint otherHand)
+        {
             Joint mainHandPoint = mainHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             Joint otherHandPoint = otherHand.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             Joint HeadPoint = head.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
@@ -362,10 +365,10 @@ namespace EngineeringProjectApp
                     }
                 }
             }
-            else {
+            else
                 OrangeDot.Fill = new SolidColorBrush(Colors.OrangeRed);
-            }
         }
+
         private void MoveItem(Joint mainHandJoint, Item item)
         {
             int offset = 50;
@@ -373,21 +376,23 @@ namespace EngineeringProjectApp
             if (mainHandJoint.Position.X <= width - offset)
             {
                 Canvas.SetLeft(item.GetImage(), mainHandJoint.Position.X);
-                item.SetX((float)mainHandJoint.Position.X);
+                item.SetX(mainHandJoint.Position.X);
             }
             if (mainHandJoint.Position.Y <= height - offset)
             {
                 Canvas.SetTop(item.GetImage(), mainHandJoint.Position.Y);
-                item.SetY((float)mainHandJoint.Position.Y);
+                item.SetY(mainHandJoint.Position.Y);
             }
-            item.SetActualPosition(FindPosition(item));
+            item.SetActualPosition(FindItemPosition(item));
         }
 
-        private Item AddItem(int x, int y, Item item) {
-            BitmapImage bitmapImage=null;
-            switch (item.GetItemType()) {
+        private Item AddItem(int x, int y, Item item)
+        {
+            BitmapImage bitmapImage = null;
+            switch (item.GetItemType())
+            {
                 case ItemType.BUTTERFLY: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/butterflyImage.png")); break;
-                case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/birdImage.png"));  break;
+                case ItemType.BIRD: bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Resources/birdImage.png")); break;
             }
             item.SetImage(new Image
             {
@@ -407,62 +412,56 @@ namespace EngineeringProjectApp
 
         private void DrawTrasmorfedPoint(Joint joint)
         {
-            Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight,0.25f,0.25f);
-            if (scaledJoint.Position.X <= width && scaledJoint.Position.X>=0)
-            {
+            Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
+            if (scaledJoint.Position.X <= width && scaledJoint.Position.X >= 0)
                 Canvas.SetLeft(OrangeDot, scaledJoint.Position.X);
-            }
             if (scaledJoint.Position.Y <= height && scaledJoint.Position.Y >= 0)
-            {
                 Canvas.SetTop(OrangeDot, scaledJoint.Position.Y);
-            }
         }
-        
+
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (null != sensor)
-            {
                 sensor.Stop();
-            }
         }
-       
+
         private void CheckBoundaries(Joint joint, DrawingContext drawingContext)
         {
             int offset = 30;
             Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
-            if (scaledJoint.Position.Y>=height- offset)
+            if (scaledJoint.Position.Y >= height - offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, height - 10.0f, width, 10.0f));   
+                    new Rect(0, height - 10.0f, width, 10.0f));
             }
             if (scaledJoint.Position.Y <= offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, width, 10.0f));   
+                    new Rect(0, 0, width, 10.0f));
             }
             if (scaledJoint.Position.X <= offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, 10.0f, height));   
+                    new Rect(0, 0, 10.0f, height));
             }
-            if (scaledJoint.Position.X >= width- offset)
+            if (scaledJoint.Position.X >= width - offset)
             {
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(width - 10.0f, 0, 10.0f, width));           
+                    new Rect(width - 10.0f, 0, 10.0f, width));
             }
         }
 
         private void BtnCameraPreview(object sender, RoutedEventArgs e)
         {
-            CameraPreview previewWindow = new CameraPreview(sensor,smoothParameters,watch);
+            CameraPreview previewWindow = new CameraPreview(sensor, smoothParameters, watch);
             previewWindow.Show();
             watch.Stop();
         }

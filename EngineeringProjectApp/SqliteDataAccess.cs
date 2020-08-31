@@ -30,7 +30,7 @@ namespace EngineeringProjectApp
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = "update User set FirstName = @FirstName, LastName =  @LastName where id= @id";
+                string query = "update User set FirstName = @FirstName, LastName =  @LastName where id = @id";
                 cnn.Execute(query,new { user.FirstName,user.LastName, id});
             }
         }
@@ -40,7 +40,7 @@ namespace EngineeringProjectApp
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = "DELETE FROM User WHERE id=@id";
+                string query = "delete from User where id = @id";
                 cnn.Execute(query, new { id });
             }
         }
@@ -54,11 +54,11 @@ namespace EngineeringProjectApp
             }
         }
 
-        public static void DeleteGames(int id)
+        public static void DeleteAllGamesForUser(int id)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = "DELETE FROM Game WHERE UserId=@id";
+                string query = "delete from Game where UserId = @id";
                 cnn.Execute(query, new { id });
             }
         }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace EngineeringProjectApp
+﻿namespace EngineeringProjectApp
 {
     public class UserModel
     {
@@ -8,15 +6,9 @@ namespace EngineeringProjectApp
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public string FullName {
-            get {
-                return $"{FirstName} {LastName}";
-            }
-        }
-
         public override string ToString()
         {
-            return Id+" "+FirstName+" "+LastName;
+            return Id + " " + FirstName + " " + LastName;
         }
     }
 }

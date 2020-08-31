@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:k="http://schemas.microsoft.com/kinect/2013"
-        xmlns:local="clr-namespace:EngineeringProjectApp"
-        xmlns:kt="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers"
         mc:Ignorable="d"
         Title="Dopasuj zwierzątka" WindowState="Maximized" d:DesignHeight="720" Width="1300">
     <Grid>
@@ -24,7 +22,7 @@
             <Label x:Name="ButterfliesLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label x:Name="BirdsLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label x:Name="VelocityLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <Label x:Name="MistakesLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Label x:Name="MistakeLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
             <Label x:Name="TimeLabel"  FontSize="20" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </StackPanel>
 
@@ -35,7 +33,7 @@
             <Image x:Name="Image"  HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="0" Canvas.Top="0" Width="960" Height="720"/>
             <Ellipse Fill="OrangeRed"  x:Name="OrangeDot" Stretch="Uniform" Canvas.Left="10" Canvas.Top="10" Width="20" Height="20" RenderTransformOrigin="13.3,5.35"/>
         </Canvas>
-        <Button Content="Powrót do Menu" FontSize="30" HorizontalAlignment="Left" Margin="977,615,0,0" VerticalAlignment="Top" Width="305" Click="BtnClick"/>
+        <Button Content="Powrót do Menu" FontSize="30" HorizontalAlignment="Left" Margin="977,615,0,0" VerticalAlignment="Top" Width="305" Click="ReturnButtonClick"/>
         <Button Content="Podgląd obrazu" FontSize="30" HorizontalAlignment="Left" Margin="977,549,0,0" VerticalAlignment="Top" Width="305" Click="BtnCameraPreview"/>
     </Grid>
 </Window>

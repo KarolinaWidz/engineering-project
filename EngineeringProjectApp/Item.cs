@@ -23,16 +23,16 @@ namespace EngineeringProjectApp
             this.correctPosition = false;
         }
 
-        public ItemType GetItemType() { return this.itemType; }
-        public double GetX() { return this.x; }
-        public double GetY() { return this.y; }
-        public double GetStartX() { return this.startX; }
-        public double GetStartY() { return this.startY; }
-        public Image GetImage() { return this.image; }
-        public Position GetActualPosition() { return this.actualPosition; }
-        public Position GetTargetPosition() { return this.targetPosition; }
-        public Position GetPreviousPosition() { return this.previousPosition; }
-        public bool GetCorrectPosition() { return this.correctPosition; }
+        public ItemType GetItemType() { return itemType; }
+        public double GetX() { return x; }
+        public double GetY() { return y; }
+        public double GetStartX() { return startX; }
+        public double GetStartY() { return startY; }
+        public Image GetImage() { return image; }
+        public Position GetActualPosition() { return actualPosition; }
+        public Position GetTargetPosition() { return targetPosition; }
+        public Position GetPreviousPosition() { return previousPosition; }
+        public bool GetCorrectPosition() { return correctPosition; }
         public void SetItemType(ItemType itemType) { this.itemType = itemType; }
         public void SetX(double x) { this.x = x; }
         public void SetY(double y) { this.y = y; }
@@ -41,7 +41,7 @@ namespace EngineeringProjectApp
         public void SetImage(Image image) { this.image = image; }
         public void SetActualPosition(Position actualPosition) { this.actualPosition = actualPosition; }
         public void SetPreviousPosition(Position previousPosition) { this.previousPosition = previousPosition; }
-        public void SetCorrectPostionFlag(bool correctPositionFlag) { this.correctPosition = correctPositionFlag; }
+        public void SetCorrectPostionFlag(bool correctPositionFlag) { correctPosition = correctPositionFlag; }
 
     }
 }

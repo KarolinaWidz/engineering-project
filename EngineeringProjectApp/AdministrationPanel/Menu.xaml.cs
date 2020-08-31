@@ -4,9 +4,7 @@ using System.Windows.Controls;
 
 namespace EngineeringProjectApp
 {
-    /// <summary>
-    /// Logika interakcji dla klasy Menu.xaml
-    /// </summary>
+
     public partial class Menu : UserControl
     {
         private string hand;
@@ -41,18 +39,19 @@ namespace EngineeringProjectApp
             difficultyLevel = DificultyLevelComboBox.Text;
             velocity = int.Parse(VelocityBox.Text);
 
-            if (ValidArgument(amountOfBirds, amountOfButterflies) && ValidUser(UserList.SelectedItems.Count)){
+            if (ValidArgument(amountOfBirds, amountOfButterflies) && ValidUser(UserList.SelectedItems.Count))
+            {
                 MainWindow mainWindow = new MainWindow(amountOfBirds, amountOfButterflies, hand, returningFlag, difficultyLevel, velocity, (UserModel)UserList.SelectedItems[0]);
                 mainWindow.Show();
                 Application.Current.Windows[0].Close();
-            }            
+            }
         }
 
         private bool ValidArgument(int amountOfBirds, int amountOfButterflies)
         {
             if (amountOfButterflies + amountOfBirds == 0)
             {
-                MessageBox.Show("Sumaryczna liczba zwierzątek musi być większa od zera", "Błąd!");
+                MessageBox.Show("Sumaryczna liczba zwierząt musi być większa od zera", "Błąd!");
                 return false;
             }
             return true;
@@ -60,7 +59,7 @@ namespace EngineeringProjectApp
 
         private bool ValidUser(int amount)
         {
-            if (amount ==0)
+            if (amount == 0)
             {
                 MessageBox.Show("Nie wybrano użytkownika", "Błąd!");
                 return false;
@@ -70,7 +69,7 @@ namespace EngineeringProjectApp
 
         private bool CheckNames(string firstName, string lastName)
         {
-            if (firstName.Length == 0 || lastName.Length==0)
+            if (firstName.Length == 0 || lastName.Length == 0)
             {
                 MessageBox.Show("Podano błędną nazwę użytkownika", "Błąd!");
                 return false;
@@ -99,14 +98,14 @@ namespace EngineeringProjectApp
         {
             if (CheckNames(FirstNameTextBox.Text, LastNameTextBox.Text) && ValidUser((UserList.SelectedItems.Count)))
             {
-                UserModel prevUser = (UserModel)UserList.SelectedItems[0];
-                UserModel u = new UserModel
+                UserModel userBeforeEditing = (UserModel)UserList.SelectedItems[0];
+                UserModel userAfterEditing = new UserModel
                 {
                     FirstName = FirstNameTextBox.Text,
                     LastName = LastNameTextBox.Text
                 };
-                
-                SqliteDataAccess.EditUser(u,prevUser.Id);
+
+                SqliteDataAccess.EditUser(userAfterEditing, userBeforeEditing.Id);
                 users = SqliteDataAccess.LoadAllUsers();
                 UserList.ItemsSource = users;
             }
@@ -118,7 +117,7 @@ namespace EngineeringProjectApp
             {
                 UserModel user = (UserModel)UserList.SelectedItems[0];
                 SqliteDataAccess.DeleteUser(user.Id);
-                SqliteDataAccess.DeleteGames(user.Id);
+                SqliteDataAccess.DeleteAllGamesForUser(user.Id);
                 users = SqliteDataAccess.LoadAllUsers();
                 UserList.ItemsSource = users;
             }

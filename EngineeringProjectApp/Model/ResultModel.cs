@@ -2,7 +2,7 @@
 {
     public class ResultModel
     {
-        
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Date { get; set; }
@@ -11,12 +11,10 @@
         public int AmountOfButterflies { get; set; }
         public int AmountOfBirds { get; set; }
         public int Time { get; set; }
-        
-
 
         public override string ToString()
         {
-            return FirstName+" "+LastName+" "+ Date + " " + Level + " " + Returning + " " + AmountOfButterflies + " " + AmountOfBirds + " " + Time;
+            return FirstName + " " + LastName + " " + Date + " " + Level + " " + Returning + " " + AmountOfButterflies + " " + AmountOfBirds + " " + Time;
         }
     }
 }
