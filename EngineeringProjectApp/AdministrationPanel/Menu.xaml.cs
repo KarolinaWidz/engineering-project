@@ -37,7 +37,10 @@ namespace EngineeringProjectApp
             amountOfBirds = int.Parse(AmountOfBirdsBox.Text);
             amountOfButterflies = int.Parse(AmountOfButterfliesBox.Text);
             difficultyLevel = DificultyLevelComboBox.Text;
-            velocity = int.Parse(VelocityBox.Text);
+            if (difficultyLevel == "Łatwy")
+                velocity = 0;
+            else
+                velocity = int.Parse(VelocityBox.Text);
 
             if (ValidArgument(amountOfBirds, amountOfButterflies) && ValidUser(UserList.SelectedItems.Count))
             {

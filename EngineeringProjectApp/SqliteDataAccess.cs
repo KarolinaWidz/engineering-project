@@ -69,10 +69,10 @@ namespace EngineeringProjectApp
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
 
-                string query = "insert into Game (UserId, Date, Level, Returning, AmountOfButterflies, AmountOfBirds, Time) " +
-                    "values (@UserId, @Date, @Level, @Returning, @AmountOfButterflies, @AmountOfBirds, @Time)";
+                string query = "insert into Game (UserId, Date, Level, Returning, AmountOfButterflies, AmountOfBirds, Time, Velocity) " +
+                    "values (@UserId, @Date, @Level, @Returning, @AmountOfButterflies, @AmountOfBirds, @Time, @Velocity)";
                 cnn.Execute(query, new {
-                    game.UserId, game.Date, game.Level, game.Returning, game.AmountOfButterflies, game.AmountOfBirds, game.Time
+                    game.UserId, game.Date, game.Level, game.Returning, game.AmountOfButterflies, game.AmountOfBirds, game.Time, game.Velocity
 
                 });
             }
@@ -83,7 +83,7 @@ namespace EngineeringProjectApp
 
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                string query = "select User.FirstName, User.LastName, Game.Date, Game.Level, Game.Returning, Game.AmountOfButterflies, Game.AmountOfBirds, Game.Time from User inner join Game on User.Id = Game.UserId where Game.Level like @value and  User.Id = @id and Game.Returning= @flag order by Game.Time ";
+                string query = "select User.FirstName, User.LastName, Game.Date, Game.Level, Game.Returning, Game.AmountOfButterflies, Game.AmountOfBirds, Game.Time, Game.Velocity from User inner join Game on User.Id = Game.UserId where Game.Level like @value and  User.Id = @id and Game.Returning= @flag order by Game.Time ";
                 var output = cnn.Query<ResultModel>(query, new { value = level, id = userId, flag = returningFlag});
                 return output.ToList();
             }

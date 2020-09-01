@@ -189,7 +189,6 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include=".gitignore" />
     <None Include="EngineeringProjectApp_1_TemporaryKey.pfx" />
     <None Include="EngineeringProjectApp_TemporaryKey.pfx" />
     <Content Include="gameDb.db">

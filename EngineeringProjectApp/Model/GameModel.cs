@@ -10,10 +10,11 @@
         public int AmountOfButterflies { get; set; }
         public int AmountOfBirds { get; set; }
         public int Time { get; set; }
+        public int Velocity { get; set; }
 
         public override string ToString()
         {
-            return GameId + " " + UserId + " " + Date + " " + Level + " " + Returning + " " + AmountOfButterflies + " " + AmountOfBirds + " " + Time;
+            return GameId + " " + UserId + " " + Date + " " + Level + " " + Returning + " " + AmountOfButterflies + " " + AmountOfBirds + " " + Time + " " + Velocity;
         }
     }
 }

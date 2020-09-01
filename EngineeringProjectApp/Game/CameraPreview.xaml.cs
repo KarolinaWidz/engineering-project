@@ -16,11 +16,11 @@ namespace EngineeringProjectApp
         public CameraPreview(KinectSensor sensor, TransformSmoothParameters smoothParameters, Stopwatch watch)
         {
             InitializeComponent();
+            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution1280x960Fps12);
+            sensor.ColorFrameReady += SensorColorFrameReady;
             this.sensor = sensor;
             this.smoothParameters = smoothParameters;
             this.watch = watch;
-            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution1280x960Fps12);
-            sensor.ColorFrameReady += SensorColorFrameReady;
             sensor.SkeletonStream.Disable();
             Closing += Window_Closing;
         }

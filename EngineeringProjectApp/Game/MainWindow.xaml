@@ -34,6 +34,6 @@
             <Ellipse Fill="OrangeRed"  x:Name="OrangeDot" Stretch="Uniform" Canvas.Left="10" Canvas.Top="10" Width="20" Height="20" RenderTransformOrigin="13.3,5.35"/>
         </Canvas>
         <Button Content="Powrót do Menu" FontSize="30" HorizontalAlignment="Left" Margin="977,615,0,0" VerticalAlignment="Top" Width="305" Click="ReturnButtonClick"/>
-        <Button Content="Podgląd obrazu" FontSize="30" HorizontalAlignment="Left" Margin="977,549,0,0" VerticalAlignment="Top" Width="305" Click="BtnCameraPreview"/>
+        <Button Content="Podgląd obrazu" FontSize="30" HorizontalAlignment="Left" Margin="977,549,0,0" VerticalAlignment="Top" Width="305" Click="PreviewButtonClick"/>
     </Grid>
 </Window>

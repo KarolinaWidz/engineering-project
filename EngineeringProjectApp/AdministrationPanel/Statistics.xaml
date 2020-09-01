@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Statystyki" Height="450" Width="800">
+        Title="Statystyki" Height="450" Width="870">
     <Grid>
         <Label Content="Poziom trudności:" HorizontalAlignment="Left" Margin="43,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.51,0.846" Width="104"/>
         <ComboBox Name="DificultyLevelComboBox" HorizontalAlignment="Left" Margin="154,20,0,0" VerticalAlignment="Top" Width="120">
@@ -135,6 +135,21 @@
                                 <Grid>
                                     <TextBlock Margin="2"
                                         Text="{Binding Path=Time}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Prędkość" Margin="2" />
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Margin="2"
+                                        Text="{Binding Path=Velocity}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

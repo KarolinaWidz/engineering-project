@@ -40,7 +40,6 @@ namespace EngineeringProjectApp
         {
             InitializeComponent();
             Loaded += WindowLoaded;
-            Closing += WindowClosing;
             this.amountOfBirds = amountOfBirds;
             this.amountOfButterflies = amountOfButterflies;
             this.chosenHand = chosenHand;
@@ -249,7 +248,8 @@ namespace EngineeringProjectApp
                     AmountOfButterflies = amountOfButterflies,
                     Returning = (returningItems) ? 1 : 0,
                     UserId = activeUser.Id,
-                    Time = (int)watch.ElapsedMilliseconds / 1000
+                    Time = (int)watch.ElapsedMilliseconds / 1000,
+                    Velocity = velocity
                 };
                 SqliteDataAccess.SaveGame(activeGame);
                 ShowFinalScene();
@@ -459,7 +459,7 @@ namespace EngineeringProjectApp
             }
         }
 
-        private void BtnCameraPreview(object sender, RoutedEventArgs e)
+        private void PreviewButtonClick(object sender, RoutedEventArgs e)
         {
             CameraPreview previewWindow = new CameraPreview(sensor, smoothParameters, watch);
             previewWindow.Show();
