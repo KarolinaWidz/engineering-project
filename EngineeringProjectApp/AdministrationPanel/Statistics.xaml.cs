@@ -1,5 +1,10 @@
-﻿using EngineeringProjectApp.Model;
+﻿using CsvHelper;
+using EngineeringProjectApp.Model;
+using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows;
 
 namespace EngineeringProjectApp
@@ -27,6 +32,12 @@ namespace EngineeringProjectApp
         {
             results = SqliteDataAccess.LoadGamesForUser(DificultyLevelComboBox.Text, userId, ReturningCheckBox.IsChecked == true ? 1 : 0);
             StatisticsList.ItemsSource = results;
+        }
+
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToFile saveToFileWindow = new SaveToFile(results);
+            saveToFileWindow.Show();
         }
     }
 }

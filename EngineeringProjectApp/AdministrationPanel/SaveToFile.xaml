@@ -1,0 +1,18 @@
+﻿<Window x:Class="EngineeringProjectApp.SaveToFile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EngineeringProjectApp"
+        mc:Ignorable="d"
+        Title="Zapisz do pliku" Height="200" Width="400">
+    <Grid>
+        <Button Content="Wybierz lokalizację" HorizontalAlignment="Left" Margin="243,54,0,0" VerticalAlignment="Top" Width="114" Click="BtnPath_Click"/>
+        <Button Content="Zapisz" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="146,132,146,0" Click="BtnName_Click"/>
+        <TextBox Name ="Path" HorizontalAlignment="Left" Height="23" Margin="106,26,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="251"/>
+        <TextBox Name="Name" HorizontalAlignment="Left" Height="23" Margin="106,88,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="251"/>
+        <Label Content="Lokalizacja: " HorizontalAlignment="Left" Margin="31,23,0,0" VerticalAlignment="Top" Width="70"/>
+        <Label Content="Nazwa pliku:" HorizontalAlignment="Left" Margin="24,85,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

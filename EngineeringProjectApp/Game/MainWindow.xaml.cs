@@ -11,6 +11,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using System.Media;
 using System.Diagnostics;
+using System.Windows.Media.Animation;
 
 namespace EngineeringProjectApp
 {
@@ -167,14 +168,13 @@ namespace EngineeringProjectApp
         private void StartFlying(Item item, int shiftLeft, int shiftTop)
         {
             if ((item.GetX() + shiftLeft) <= 680 && (item.GetX() + shiftLeft) >= 210
-                && (item.GetY() + shiftTop) <= 600 && (item.GetY() + shiftTop) >= 40)
+                            && (item.GetY() + shiftTop) <= 600 && (item.GetY() + shiftTop) >= 40)
             {
                 Canvas.SetLeft(item.GetImage(), item.GetX() + shiftLeft);
                 Canvas.SetTop(item.GetImage(), item.GetY() + shiftTop);
                 item.SetX(item.GetX() + shiftLeft);
                 item.SetY(item.GetY() + shiftTop);
             }
-
         }
 
         private void StartFlyingForAll(int velocity)
