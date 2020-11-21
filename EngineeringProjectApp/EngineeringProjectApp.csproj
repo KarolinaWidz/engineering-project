@@ -148,13 +148,13 @@
       <DependentUpon>CameraPreview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\GameModel.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="ItemType.cs" />
+    <Compile Include="Game\Item.cs" />
+    <Compile Include="Game\ItemType.cs" />
     <Compile Include="AdministrationPanel\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\ResultModel.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="Game\Position.cs" />
     <Compile Include="AdministrationPanel\SaveToFile.xaml.cs">
       <DependentUpon>SaveToFile.xaml</DependentUpon>
     </Compile>

@@ -12,8 +12,8 @@ namespace EngineeringProjectApp
     /// </summary>
     public partial class SaveToFile : Window
     {
-        List<Model.ResultModel> dataToExport;
-        string selectedPath;
+        private List<Model.ResultModel> dataToExport;
+        private string selectedPath;
         public SaveToFile(List<Model.ResultModel> dataToExport)
         {
             InitializeComponent();

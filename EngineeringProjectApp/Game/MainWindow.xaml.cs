@@ -20,10 +20,10 @@ namespace EngineeringProjectApp
         private KinectSensor sensor;
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
-        const int scaleHeight = 700;
-        const int scaleWidth = 940;
-        const int height = 720;
-        const int width = 960;
+        private const int scaleHeight = 700;
+        private const int scaleWidth = 940;
+        private const int height = 720;
+        private const int width = 960;
         private Item[] itemsArray;
         private int amountOfBirds;
         private int amountOfButterflies;
@@ -153,7 +153,7 @@ namespace EngineeringProjectApp
 
                             if (mainHand.TrackingState == JointTrackingState.Tracked || mainHand.TrackingState == JointTrackingState.Inferred)
                             {
-                                DrawTrasmorfedPoint(mainHand);
+                                DrawTransformedPoint(mainHand);
                                 ScanItems(mainHand, mainSkeleton.Joints[JointType.Head], otherHand);
                             }
                         }
@@ -410,7 +410,7 @@ namespace EngineeringProjectApp
             return item;
         }
 
-        private void DrawTrasmorfedPoint(Joint joint)
+        private void DrawTransformedPoint(Joint joint)
         {
             Joint scaledJoint = joint.ScaleTo(scaleWidth, scaleHeight, 0.25f, 0.25f);
             if (scaledJoint.Position.X <= width && scaledJoint.Position.X >= 0)
